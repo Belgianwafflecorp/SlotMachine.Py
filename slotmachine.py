@@ -212,7 +212,7 @@ def spin(balance):
     slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
     print_slot_machine(slots)
     winnings, winning_lines = check_winnings(slots, lines, bet, symbol_values)
-    print(f"You won ${winnings}")
+    print(f"You won" + Fore.YELLOW + f" ${winnings}" + Style.RESET_ALL)
     print(f"You won on line(s):", *winning_lines) 
 
     # Check if there are winnings
@@ -221,7 +221,10 @@ def spin(balance):
         choice = input("Do you want to use a random multiplier on your winnings? (Y/N): ").upper()
         if choice == "Y":
             new_winnings = random_multi_winnings(winnings)
-            print("Adjusted winnings:", new_winnings)
+            if new_winnings > 0:
+                print("Adjusted winnings:"+ Fore.YELLOW + f" ${new_winnings}" + Style.RESET_ALL)
+            else:
+                print(f"Adjusted winnings:"+ Fore.YELLOW + f" ${new_winnings}" + Style.RESET_ALL)
         else:
             new_winnings = winnings
     else:
@@ -243,7 +246,7 @@ def main():
     print("Welcome to the slot machine!")
     balance = deposit()
     while True:
-        print(f"Your balance is ${balance}.")
+        print("Your balance is"+ Fore.GREEN + f" ${balance}" + Style.RESET_ALL)
         if broke(balance):  
             break
         answer = input("Press enter to play (Q to quit): ")
