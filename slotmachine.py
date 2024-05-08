@@ -10,16 +10,16 @@ COLS = 3
 
 symbol_count = {
     "A" : 5,
-    "B" : 15,
-    "C" : 30,
-    "D" : 50,
+    "B" : 10,
+    "C" : 20,
+    "D" : 40,
 }
 
 symbol_values = {
-    "A" : 40,
-    "B" : 20,
-    "C" : 10,
-    "D" : 5,
+    "A" : 100,
+    "B" : 10,
+    "C" : 5,
+    "D" : 3,
 }
 
 def check_winnings(columns, lines, bet, values):
@@ -83,16 +83,17 @@ def deposit():
 
 
 def get_number_of_lines():
-    while True:
-        lines = input("How many lines do you want to bet on? (1-" + str(MAX_LINES) + "? ")
-        if lines.isdigit():
-            lines = int(lines)
-            if 1 <= lines <= MAX_LINES:
-                break
-            else:
-                print("Please enter a number between 1 and 3.")
-        else:
-            print("Please enter a valid number.")
+   # while True:
+   #     lines = input("How many lines do you want to bet on? (1-" + str(MAX_LINES) + "? ")
+    #    if lines.isdigit():
+   #         lines = int(lines)
+   #         if 1 <= lines <= MAX_LINES:
+   #             break
+   #         else:
+    #            print("Please enter a number between 1 and 3.")
+   #     else:
+   #         print("Please enter a valid number.")
+    lines = MAX_LINES
     return lines
 
 
@@ -114,20 +115,20 @@ def spin(balance):
     lines = get_number_of_lines()
     while True:
         bet = get_bet()
-        total_bet = bet * lines
-        if total_bet > balance:
+        #total_bet = bet * lines
+        if bet > balance:
             print(f"You don't have enough money to make that bet. Your balance is ${balance}.")
         else:
             break
 
-    print(f"You are betting ${bet} on {lines} lines. Total bet: ${total_bet}")
+    print(f"You are betting ${bet} on {lines} lines. Total bet: ${bet}")
 
     slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
     print_slot_machine(slots)
     winnings, winning_lines = check_winnings(slots, lines, bet, symbol_values)
     print(f"You won ${winnings}")
     print(f"You won on line(s):", *winning_lines) 
-    return winnings - total_bet
+    return winnings - bet
 
 
 def main():
