@@ -138,16 +138,25 @@ def spin(balance):
     return winnings - bet
 
 
+def broke(balance):
+    if balance == 0:
+        print("Time to go home fren.")
+        return True
+
+
 def main():
     print("Welcome to the slot machine!")
     balance = deposit()
     while True:
         print(f"Your balance is ${balance}.")
-        answer = input("Press enter to play (q to quit): ")
+        if broke(balance):
+            break
+        answer = input("Press enter to play (Q to quit): ")
         if answer.lower() == "q":
+            print(f"You checked out with ${balance}. Thanks for playing!")
             break
         balance += spin(balance)
-    print(f"You checked out with ${balance}. Thanks for playing!")
+    
 
 main()
 
