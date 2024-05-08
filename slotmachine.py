@@ -138,6 +138,7 @@ def get_slot_machine_spin(rows, cols, symbols):
 
 
 def print_slot_machine(columns):
+    print()
     for row in range(len(columns[0])): #for each row in the first column
         for i, column in enumerate(columns): #for each column in the columns list
             if i != len(columns) - 1:   #if the column is not the last column
@@ -211,6 +212,7 @@ def spin(balance):
 
     slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
     print_slot_machine(slots)
+    print()
     winnings, winning_lines = check_winnings(slots, lines, bet, symbol_values)
     print(f"You won" + Fore.YELLOW + f" ${winnings}" + Style.RESET_ALL)
     print(f"You won on line(s):", *winning_lines) 
