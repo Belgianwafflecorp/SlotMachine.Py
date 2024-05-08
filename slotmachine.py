@@ -73,10 +73,14 @@ def deposit():
         amount = input("Enter the amount you want to deposit: $")
         if amount.isdigit():
             amount = int(amount)
-            if amount > 0:
+            if amount > 1000:
+                print("Don't get over your head.")
+                amount = 1000
                 break
-            else:
+                
+            elif amount <= 0:
                 print("Please enter a positive amount.")
+
         else:
             print("Please enter a valid amount.")
     return amount
