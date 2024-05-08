@@ -13,18 +13,22 @@ symbol_count = {
     "B" : 10,
     "C" : 20,
     "D" : 40,
+    "0" : 25,
 }
 
 symbol_values = {
-    "A" : 100,
+    "A" : 50,
     "B" : 10,
     "C" : 5,
     "D" : 2,
+    "0" : 0,
 }
 
 def check_winnings(columns, lines, bet, values):
     winnings = 0
     winning_lines = []
+
+    # Check horizontal winning lines
     for line in range(lines):
         symbol = columns[0][line]
         for column in columns:
@@ -35,7 +39,29 @@ def check_winnings(columns, lines, bet, values):
             winnings += values[symbol] * bet
             winning_lines.append(line + 1)
 
+    # Check vertical winning lines
+    for column in columns:
+        symbol = column[0]
+        for symbol_to_check in column:
+            if symbol != symbol_to_check:
+                break
+        else:
+            winnings += values[symbol] * bet
+            if winning_lines:
+                winning_lines.append(winning_lines[-1] + 1)
+            else:
+                winning_lines.append(1)
+
+    # Check diagonal winning lines
+    if columns[0][0] == columns[1][1] == columns[2][2]:
+        winnings += values[columns[0][0]] * bet
+        winning_lines.append(4)
+    if columns[0][2] == columns[1][1] == columns[2][0]:
+        winnings += values[columns[0][2]] * bet
+        winning_lines.append(5)
+
     return winnings, winning_lines
+
 
 
 def get_slot_machine_spin(rows, cols, symbols):
@@ -149,7 +175,7 @@ def main():
     balance = deposit()
     while True:
         print(f"Your balance is ${balance}.")
-        if broke(balance):
+        if broke(balance):  
             break
         answer = input("Press enter to play (Q to quit): ")
         if answer.lower() == "q":
