@@ -19,7 +19,7 @@ symbol_values = {
     "A" : 100,
     "B" : 10,
     "C" : 5,
-    "D" : 3,
+    "D" : 2,
 }
 
 def check_winnings(columns, lines, bet, values):
