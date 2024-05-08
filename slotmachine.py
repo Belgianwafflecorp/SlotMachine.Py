@@ -5,20 +5,21 @@ MAX_BET = 100
 MIN_BET = 1
 
 ROWS = 3
+
 COLS = 3
 
 symbol_count = {
-    "A" : 4,
-    "B" : 8,
-    "C" : 16,
-    "D" : 20,
+    "A" : 5,
+    "B" : 15,
+    "C" : 30,
+    "D" : 50,
 }
 
 symbol_values = {
-    "A" : 5,
-    "B" : 4,
-    "C" : 3,
-    "D" : 2,
+    "A" : 40,
+    "B" : 20,
+    "C" : 10,
+    "D" : 5,
 }
 
 def check_winnings(columns, lines, bet, values):
@@ -125,7 +126,7 @@ def spin(balance):
     print_slot_machine(slots)
     winnings, winning_lines = check_winnings(slots, lines, bet, symbol_values)
     print(f"You won ${winnings}")
-    print(f"You won on lines:", *winning_lines) 
+    print(f"You won on line(s):", *winning_lines) 
     return winnings - total_bet
 
 
