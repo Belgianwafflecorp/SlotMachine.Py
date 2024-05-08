@@ -1,4 +1,9 @@
 import random
+import colorama
+from colorama import Fore, Style
+
+# Initialize colorama
+colorama.init()
 
 MAX_LINES = 3
 MAX_BET = 100
@@ -61,6 +66,55 @@ def check_winnings(columns, lines, bet, values):
         winning_lines.append(5)
 
     return winnings, winning_lines
+
+def multi_win(winnings, winning_lines):
+    
+    #Increase the winnings by 20% for each extra winning line beyond the first.
+    
+    if len(winning_lines) > 1:
+        extra_lines = len(winning_lines) - 1
+        extra_winnings = extra_lines * 0.2 * winnings
+        return winnings + extra_winnings
+    else:
+        return winnings
+    
+
+def random_multi_winnings(winnings):
+   
+    #Apply a random multiplier to the winnings based on specified probabilities.
+   
+    # Define probabilities for each multiplier
+    probabilities = {
+        1000:   0.00001,     # 0.001% chance to multiply winnings by 1000
+        100:    0.0001,      # 0.01% chance to multiply winnings by 100
+        10:     0.001,       # 0.1% chance to multiply winnings by 10
+        2:      0.01,        # 1% chance to double the winnings
+        1.5:    0.05,        # 5% chance to add 50% of the winnings
+        0:      0.82,        # 82% chance to lose the winnings
+        -0.1:   0.10,        # 10% chance to lose 10% of the winnings
+        -0.5:   0.04         # 4% chance to lose 50% of the winnings
+    }
+
+    # Choose a multiplier based on probabilities
+    multiplier = random.choices(list(probabilities.keys()), list(probabilities.values()))[0]
+
+    # Apply the multiplier to the winnings
+    if multiplier == 10:
+        return winnings * 10
+    elif multiplier == 100:
+        return winnings * 100
+    elif multiplier == 2:
+        return winnings * 2
+    elif multiplier == 1.5:
+        return winnings * 1.5
+    elif multiplier == 1.3:
+        return winnings * 1.3
+    elif multiplier == -0.1:
+        return winnings * 0.9
+    elif multiplier == -0.5:
+        return winnings * 0.5
+    else:
+        return 0  # If no multiplier is applied, user loses their winnings
 
 
 
@@ -148,7 +202,6 @@ def spin(balance):
     lines = get_number_of_lines()
     while True:
         bet = get_bet()
-        #total_bet = bet * lines
         if bet > balance:
             print(f"You don't have enough money to make that bet. Your balance is ${balance}.")
         else:
@@ -161,13 +214,29 @@ def spin(balance):
     winnings, winning_lines = check_winnings(slots, lines, bet, symbol_values)
     print(f"You won ${winnings}")
     print(f"You won on line(s):", *winning_lines) 
-    return winnings - bet
+
+    # Check if there are winnings
+    if winnings > 0:
+        # Ask the user if they want to apply a random multiplier
+        choice = input("Do you want to use a random multiplier on your winnings? (Y/N): ").upper()
+        if choice == "Y":
+            new_winnings = random_multi_winnings(winnings)
+            print("Adjusted winnings:", new_winnings)
+        else:
+            new_winnings = winnings
+    else:
+        new_winnings = 0
+
+    return new_winnings - bet
+
+
 
 
 def broke(balance):
     if balance == 0:
-        print("Time to go home fren.")
+        print(colorama.Fore.YELLOW + "Time to go home fren" + colorama.Style.RESET_ALL)
         return True
+
 
 
 def main():
