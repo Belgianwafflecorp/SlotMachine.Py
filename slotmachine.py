@@ -81,6 +81,9 @@ def deposit():
             elif amount <= 0:
                 print("Please enter a positive amount.")
 
+            else:
+                break
+
         else:
             print("Please enter a valid amount.")
     return amount
