@@ -259,12 +259,32 @@ def print_slot_machine(columns):
     slots = get_slot_machine_spin(ROWS, COLS, symbol_count)  # Generate slot machine spin
     winnings, winning_lines = check_winnings(slots, MAX_LINES, MAX_BET, symbol_values)  # Calculate winnings
     for row in range(len(columns[0])):  # For each row in the first column
-        print(" " * 12, end="| ")  # Print 12 spaces and "|" at the beginning of each row
+        print(" " * 12, end="|   ")  # Print 12 spaces and "|" at the beginning of each row
         for i, column in enumerate(columns):  # For each column in the columns list
             if i != len(columns) - 1:  # If the column is not the last column
-                print(" " + column[row], end=" | ")  # Check if it's not the last index to print "|"
+                symbol = column[row]
+                if symbol == "@":
+                    print("\033[31m" + symbol + "\033[0m", end=" | ")  # Red color for symbol "@"
+                elif symbol == "£":
+                    print("\033[32m" + symbol + "\033[0m", end=" | ")  # Green color for symbol "£"
+                elif symbol == "$":
+                    print("\033[33m" + symbol + "\033[0m", end=" | ")  # Yellow color for symbol "$"
+                elif symbol == "€":
+                    print("\033[34m" + symbol + "\033[0m", end=" | ")  # Blue color for symbol "€"
+                elif symbol == "§":
+                    print("\033[35m" + symbol + "\033[0m", end=" | ")  # Magenta color for symbol "§"
             else:
-                print(column[row] + " ", end=" | ")  # If it's the last index, print "|" at the end of the row with additional space
+                symbol = column[row]
+                if symbol == "@":
+                    print("\033[31m" + symbol + "\033[0m" + " ", end=" | ")  # Red color for symbol "@"
+                elif symbol == "£":
+                    print("\033[32m" + symbol + "\033[0m" + " ", end=" | ")  # Green color for symbol "£"
+                elif symbol == "$":
+                    print("\033[33m" + symbol + "\033[0m" + " ", end=" | ")  # Yellow color for symbol "$"
+                elif symbol == "€":
+                    print("\033[34m" + symbol + "\033[0m" + " ", end=" | ")  # Blue color for symbol "€"
+                elif symbol == "§":
+                    print("\033[35m" + symbol + "\033[0m" + " ", end=" | ")  # Magenta color for symbol "§"
         print()  # Print a new line
       
 
