@@ -178,9 +178,7 @@ def print_slot_machine(columns):
             else:
                 print(column[row] + " ", end=" | ")  # If it's the last index, print "|" at the end of the row with additional space
         print()  # Print a new line
-    print(slot_machine_part_2)  
-    slot_machine_part_3(winnings)
-    print(slot_machine_part_4)  
+      
 
 
 
@@ -245,13 +243,16 @@ def spin(balance):
         else:
             break
 
-    print(f"You are betting ${bet} on {lines} lines. Total bet: ${bet}")
+    print(f"You are betting ${bet} ")
 
     slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
 
     winnings, winning_lines = check_winnings(slots, lines, bet, symbol_values)
 
     print_slot_machine(slots)
+    print(slot_machine_part_2)  
+    slot_machine_part_3(winnings)
+    print(slot_machine_part_4)
     print()
     
     print("You won \033[33m$" + str(winnings) + "\033[0m")
