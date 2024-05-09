@@ -412,7 +412,7 @@ def apply_multipliers(winnings):
         print("\033[36m" + random.choice(quotes_loss) + "\033[0m")
     return new_winnings
 
-def check_spin_counter(spin_counter):
+def check_spin_counter(start_spin_count):
     if spin_counter > 1000000:
         print("\033[36mA FOOKIN LEGEND, that's what you are!\033[0m\n")
     elif spin_counter > 250000:
@@ -427,6 +427,8 @@ def check_spin_counter(spin_counter):
         print("\033[36mWelcome back rookie\033[0m\n")
     elif spin_counter > 1000:
         print("\033[36mWelcome back newbie\033[0m\n")
+    else:
+        print("\033[36mStill new here i see\033[0m\n")
 
 
 def check_session_spins(session_spins):
@@ -478,11 +480,12 @@ def main():
     start_spin_count = load_spin_count()
     balance = load_balance()
     highscore = load_highscore()
-    
-    spin_counter = start_spin_count  # Set the current spin count to the start spin count
-    print(f"Total spins: \033[34m{start_spin_count}\033[0m \n")
-    check_spin_counter(spin_counter)
+
+    print(f"Total spins: \033[34m{start_spin_count}\033[0m")
+    check_spin_counter(start_spin_count)
     print_highscore(highscore)
+
+    spin_counter = start_spin_count  # Set the current spin count to the start spin count
     
     if balance is None or balance == 0:
         print("No balance found or balance is zero.")
