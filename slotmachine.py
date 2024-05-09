@@ -354,15 +354,27 @@ def validate_bet(balance):
         else:
             return bet
 
+def print_multiplier_message(winnings, new_winnings):
+    if new_winnings > winnings:
+        print("\033[35mProfits on top of profits!\033[0m")
+        if new_winnings >= winnings * 100:
+            print("\033[35mYou hit the jackpot! Your winnings are multiplied by 100!\033[0m")
+        elif new_winnings >= winnings * 10:
+            print("\033[35mYou got a massive win! Your winnings are multiplied by 10!\033[0m")
+        elif new_winnings >= winnings * 2:
+            print("\033[35mYou doubled your winnings with the multiplier!\033[0m")
+        elif new_winnings >= winnings * 1.5:
+            print("\033[35mYou increased your winnings by 50% with the multiplier!\033[0m")
+        else:
+            print("\033[35mYou made some profit with the multiplier!\033[0m")
+    
 def apply_multipliers(winnings):
     if winnings > 0:
         print("\033[36m" + random.choice(quotes_win) + "\033[0m")
         choice = input("Do you want to use a random multiplier on your winnings? (Y/N): ").upper()
         if choice == "Y":
             new_winnings = random_multi_winnings(winnings)
-            if new_winnings > winnings:
-                print("\033[35mProfits on top of profits!\033[0m")
-                
+            print_multiplier_message(winnings, new_winnings)
             if new_winnings > 0:
                 print("Adjusted winnings: \033[33m$" + str(new_winnings) + "\033[0m")
             else:
@@ -374,6 +386,7 @@ def apply_multipliers(winnings):
         new_winnings = 0
         print("\033[36m" + random.choice(quotes_loss) + "\033[0m")
     return new_winnings
+
 
 
 def spin(balance):
