@@ -1,6 +1,7 @@
 import random
 import json
 import os
+import sys
 
 BALANCE_FILE = "balance.json"
 HIGHSCORE_FILE = "highscore.json"
@@ -16,7 +17,22 @@ def save_balance(balance):
     with open(BALANCE_FILE, "w") as f:
         json.dump(balance, f)
 
+def load_highscore():
+    if os.path.exists(HIGHSCORE_FILE):
+        with open(HIGHSCORE_FILE, "r") as f:
+            return json.load(f)
+    else:
+        return 0  # Return 0 if the highscore file doesn't exist
 
+def save_highscore(highscore):
+    with open(HIGHSCORE_FILE, "w") as f:
+        json.dump(highscore, f)
+
+def print_highscore(highscore):
+    if highscore != 0:
+        print("Remember the time you had " + "\033[32m" + "$" + str(highscore) + "\033[0m" + "?")
+        print("\033[36m" + "Time to double that!" + "\033[0m")
+        print()
 
 MAX_LINES = 3
 MAX_BET = 100
@@ -364,8 +380,10 @@ def broke(balance):
 
 
 def main():
-    print("Welcome to the slot machine!")
+    print("\nWelcome to the slot machine!\n")
     balance = load_balance()
+    highscore = load_highscore()
+    print_highscore(highscore)
     if balance is None or balance == 0:
         print("No balance found or balance is zero.")
         balance = deposit()
@@ -376,11 +394,14 @@ def main():
         answer = input("Press enter to play (Q to quit): ")
         if answer.lower() == "q":
             print(f"You checked out with ${balance}. Thanks for playing!")
-            break
+            sys.exit()  # Quit the application
         else:    
             balance += spin(balance)
+            if balance > highscore:
+                highscore = balance
     save_balance(balance)
-
+    save_highscore(highscore)
+    print_highscore(highscore)
 
 if __name__ == "__main__":
     main()
