@@ -74,8 +74,6 @@ def quit_1(balance):
         print("that's the spirit!")
         
 
-        
-
 
 def check_winnings(columns, lines, bet, values):
     winnings = 0
