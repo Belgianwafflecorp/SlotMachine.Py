@@ -478,6 +478,8 @@ def main():
     start_spin_count = load_spin_count()
     balance = load_balance()
     highscore = load_highscore()
+    
+    spin_counter = start_spin_count  # Set the current spin count to the start spin count
     print(f"Total spins: \033[34m{start_spin_count}\033[0m \n")
     check_spin_counter(spin_counter)
     print_highscore(highscore)
