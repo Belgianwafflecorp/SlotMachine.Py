@@ -1,9 +1,4 @@
 import random
-import colorama
-from colorama import Fore, Style
-
-# Initialize colorama
-colorama.init()
 
 MAX_LINES = 3
 MAX_BET = 100
@@ -235,9 +230,10 @@ def spin(balance):
     slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
     print_slot_machine(slots)
     print()
+
     winnings, winning_lines = check_winnings(slots, lines, bet, symbol_values)
-    print(f"You won" + Fore.YELLOW + f" ${winnings}" + Style.RESET_ALL)
-    print(f"You won on line(s):", *winning_lines) 
+    print("You won \033[33m$" + str(winnings) + "\033[0m")
+    print("You won on line(s):", *winning_lines) 
 
     # Check if there are winnings
     if winnings > 0:
@@ -246,9 +242,9 @@ def spin(balance):
         if choice == "Y":
             new_winnings = random_multi_winnings(winnings)
             if new_winnings > 0:
-                print("Adjusted winnings:"+ Fore.YELLOW + f" ${new_winnings}" + Style.RESET_ALL)
+                print("Adjusted winnings: \033[33m$" + str(new_winnings) + "\033[0m")
             else:
-                print(f"Adjusted winnings:"+ Fore.YELLOW + f" ${new_winnings}" + Style.RESET_ALL)
+                print("Adjusted winnings: \033[33m$" + str(new_winnings) + "\033[0m")
         else:
             new_winnings = winnings
     else:
@@ -259,9 +255,10 @@ def spin(balance):
 
 
 
+
 def broke(balance):
     if balance == 0:
-        print(colorama.Fore.YELLOW + "Time to go home fren" + colorama.Style.RESET_ALL)
+        print("\033[33mTime to go home fren\033[0m")
         return True
 
 
@@ -270,7 +267,7 @@ def main():
     print("Welcome to the slot machine!")
     balance = deposit()
     while True:
-        print("Your balance is"+ Fore.GREEN + f" ${balance}" + Style.RESET_ALL)
+        print("Your balance is \033[32m$" + str(balance) + "\033[0m")
         if broke(balance):  
             break
         answer = input("Press enter to play (Q to quit): ")
@@ -278,7 +275,7 @@ def main():
             print(f"You checked out with ${balance}. Thanks for playing!")
             break
         balance += spin(balance)
-    
+
 
 main()
 
