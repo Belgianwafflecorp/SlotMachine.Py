@@ -422,7 +422,15 @@ def apply_multipliers(winnings):
         print("\033[36m" + random.choice(quotes_loss) + "\033[0m")
     return new_winnings
 
-
+def check_session_spins(session_spins):
+    if session_spins > 1000:
+        print("\033[36mYou've spun the reels over 1000 times! FOOKIN LEGEND!!!\033[0m")
+    elif session_spins > 500:
+        print("\033[36mYou've spun the reels over 500 times! Thats the spirit!\033[0m")
+    elif session_spins > 100:
+        print("\033[36mYou've only spun the reels over 100 times. Thats below average!\033[0m")
+    elif session_spins < 100:
+        print("\033[36mNot even 100 spins. You can do better!\033[0m")
 
 def spin(balance):
     update_spin_count()
@@ -484,6 +492,7 @@ def main():
             # Calculate spins made during this session
             session_spins = spin_counter - start_spin_count
             print(f"\nYou made \033[34m{session_spins}\033[0m spins this session.\n")
+            check_session_spins(session_spins)
             print(f"You checked out with \033[32m${balance}\033[0m. Thanks for playing!\n")
             sys.exit()  # Quit the application
         else:    
