@@ -3,6 +3,7 @@ import json
 import os
 
 BALANCE_FILE = "balance.json"
+HIGHSCORE_FILE = "highscore.json"
 
 def load_balance():
     if os.path.exists(BALANCE_FILE):
@@ -165,21 +166,21 @@ def random_multi_winnings(winnings):
 
     # Apply the multiplier to the winnings
     if multiplier == 10:
-        return winnings * 10
+        return int(winnings * 10)
     elif multiplier == 100:
-        return winnings * 100
+        return int(winnings * 100)
     elif multiplier == 2:
-        return winnings * 2
+        return int(winnings * 2)
     elif multiplier == 1.5:
-        return winnings * 1.5
+        return int(winnings * 1.5)
     elif multiplier == 1.3:
-        return winnings * 1.3
+        return int(winnings * 1.3)
     elif multiplier == 1.1:
-        return winnings * 1.1
+        return int(winnings * 1.1)
     elif multiplier == -0.1:
-        return winnings * 0.9
+        return int(winnings * 0.9)
     elif multiplier == -0.5:
-        return winnings * 0.5
+        return int(winnings * 0.5)
     else:
         return 0  # If no multiplier is applied, user loses their winnings
 
