@@ -343,16 +343,6 @@ def deposit():
     return amount
 
 def get_number_of_lines():
-   # while True:
-   #     lines = input("How many lines do you want to bet on? (1-" + str(MAX_LINES) + "? ")
-    #    if lines.isdigit():
-   #         lines = int(lines)
-   #         if 1 <= lines <= MAX_LINES:
-   #             break
-   #         else:
-    #            print("Please enter a number between 1 and 3.")
-   #     else:
-   #         print("Please enter a valid number.")
     lines = MAX_LINES
     return lines
 
@@ -422,6 +412,23 @@ def apply_multipliers(winnings):
         print("\033[36m" + random.choice(quotes_loss) + "\033[0m")
     return new_winnings
 
+def check_spin_counter(spin_counter):
+    if spin_counter > 1000000:
+        print("\033[36mA FOOKIN LEGEND, that's what you are!\033[0m\n")
+    elif spin_counter > 250000:
+        print("\033[36mHigh roller club member\033[0m\n")
+    elif spin_counter > 100000:
+        print("\033[36mOne of the VIP's\033[0m\n")
+    elif spin_counter > 50000:
+        print("\033[36mWe have a gambler here\033[0m\n")
+    elif spin_counter > 10000:
+        print("\033[36mWelcome back fren\033[0m\n")
+    elif spin_counter > 5000:
+        print("\033[36mWelcome back rookie\033[0m\n")
+    elif spin_counter > 1000:
+        print("\033[36mWelcome back newbie\033[0m\n")
+
+
 def check_session_spins(session_spins):
     if session_spins > 1000:
         print("\033[36mYou've spun the reels over 1000 times! FOOKIN LEGEND!!!\033[0m")
@@ -472,6 +479,7 @@ def main():
     balance = load_balance()
     highscore = load_highscore()
     print(f"Total spins: \033[34m{start_spin_count}\033[0m \n")
+    check_spin_counter(spin_counter)
     print_highscore(highscore)
     
     if balance is None or balance == 0:
