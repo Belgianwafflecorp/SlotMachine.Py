@@ -419,11 +419,12 @@ def main():
             balance += spin(balance)
             if balance > highscore:
                 highscore = balance
+                save_highscore(highscore)  # Save highscore after each spin
     save_balance(balance)
-    save_highscore(highscore)
     print_highscore(highscore)
 
 if __name__ == "__main__":
     main()
 
 main()
+
