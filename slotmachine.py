@@ -346,15 +346,34 @@ def check_balance(balance):
         else:
             break
 
-def spin(balance):
-    lines = get_number_of_lines()
+def validate_bet(balance):
     while True:
         bet = get_bet()
         if bet > balance:
             print(f"You don't have enough money to make that bet. Your balance is ${balance}")
         else:
-            break
+            return bet
 
+def apply_multipliers(winnings):
+    if winnings > 0:
+        print("\033[36m" + random.choice(quotes_win) + "\033[0m")
+        choice = input("Do you want to use a random multiplier on your winnings? (Y/N): ").upper()
+        if choice == "Y":
+            new_winnings = random_multi_winnings(winnings)
+            if new_winnings > 0:
+                print("Adjusted winnings: \033[33m$" + str(new_winnings) + "\033[0m")
+            else:
+                print("Adjusted winnings: \033[33m$" + str(new_winnings) + "\033[0m")
+        else:
+            new_winnings = winnings
+    else:
+        new_winnings = 0
+        print("\033[36m" + random.choice(quotes_loss) + "\033[0m")
+    return new_winnings
+
+def spin(balance):
+    lines = get_number_of_lines()
+    bet = validate_bet(balance)
     print(f"You are betting ${bet}")
 
     slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
@@ -370,24 +389,8 @@ def spin(balance):
     print("You won \033[33m$" + str(winnings) + "\033[0m")
     print("You won on line(s):", *winning_lines) 
 
-    # Check if there are winnings
-    if winnings > 0:
-        print("\033[36m" + random.choice(quotes_win) + "\033[0m")
-        # Ask the user if they want to apply a random multiplier
-        choice = input("Do you want to use a random multiplier on your winnings? (Y/N): ").upper()
-        if choice == "Y":
-            new_winnings = random_multi_winnings(winnings)
-            if new_winnings > 0:
-                print("Adjusted winnings: \033[33m$" + str(new_winnings) + "\033[0m")
-            else:
-                print("Adjusted winnings: \033[33m$" + str(new_winnings) + "\033[0m")
-        else:
-            new_winnings = winnings
-    else:
-        new_winnings = 0
-        print("\033[36m" + random.choice(quotes_loss) + "\033[0m")
+    return apply_multipliers(winnings) - bet
 
-    return new_winnings - bet
 
 
 
@@ -413,7 +416,7 @@ def main():
             break
         answer = input("Press enter to play (Q to quit): ")
         if answer.lower() == "q":
-            print(f"You checked out with ${balance}. Thanks for playing!")
+            print(f"You checked out with \033[32m${balance}\033[0m. Don't forget to come back!")
             sys.exit()  # Quit the application
         else:    
             balance += spin(balance)
