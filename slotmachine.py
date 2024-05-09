@@ -134,8 +134,9 @@ def get_slot_machine_spin(rows, cols, symbols):
 
 
 slot_machine_top = """                .-------.
-            oO{-(\033[33mMACHINE\033[0m)-}Oo
+            oO{-(\033[33m\033[5mMACHINE\033[0m)-}Oo
             .==============. """
+
 
 
 slot_machine_bottom = """            |              | __
