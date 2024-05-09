@@ -6,6 +6,7 @@ import sys
 BALANCE_FILE = "balance.json"
 HIGHSCORE_FILE = "highscore.json"
 SPIN_COUNT_FILE = "spin_count.json"
+MULTIPLIER_COUNT_FILE = "multiplier_count.json"
 
 # Define the directory for JSON files
 JSON_DIR = ".gitignore"
@@ -17,6 +18,7 @@ os.makedirs(JSON_DIR, exist_ok=True)
 BALANCE_FILE = os.path.join(JSON_DIR, "balance.json")
 HIGHSCORE_FILE = os.path.join(JSON_DIR, "highscore.json")
 SPIN_COUNT_FILE = os.path.join(JSON_DIR, "spin_count.json")
+MULTIPLIER_COUNT_FILE = os.path.join(JSON_DIR, "multiplier_count.json")
 
 def load_balance():
     if os.path.exists(BALANCE_FILE):
@@ -67,6 +69,21 @@ def update_spin_count():
     spin_counter += 1
     save_spin_count(spin_counter)
 
+def load_multiplier_count():
+    if os.path.exists(MULTIPLIER_COUNT_FILE):
+        with open(MULTIPLIER_COUNT_FILE, "r") as f:
+            return json.load(f)
+    else:
+        return 0
+
+def save_multiplier_count(multiplier_count):
+    with open(MULTIPLIER_COUNT_FILE, "w") as f:
+        json.dump(f)
+
+def increment_multiplier_count():
+    multiplier_count = load_multiplier_count()
+    multiplier_count += 1
+    save_multiplier_count(multiplier_count)
 
 
 MAX_LINES = 3
@@ -323,9 +340,6 @@ def print_slot_machine(columns):
         print()  # Print a new line
       
 
-
-
-
     
 def deposit():
     while True:
@@ -398,6 +412,7 @@ def apply_multipliers(winnings):
         print("\033[36m" + random.choice(quotes_win) + "\033[0m")
         choice = input("Do you want to use a random multiplier on your winnings? (Y/N): ").upper()
         if choice == "Y":
+            increment_multiplier_count()
             new_winnings = random_multi_winnings(winnings)
             print_multiplier_message(winnings, new_winnings)
             if new_winnings > 0:
@@ -480,12 +495,15 @@ def main():
     start_spin_count = load_spin_count()
     balance = load_balance()
     highscore = load_highscore()
+    multiplier_count = load_multiplier_count()
 
     print(f"Total spins: \033[34m{start_spin_count}\033[0m")
     check_spin_counter(start_spin_count)
     print_highscore(highscore)
 
     spin_counter = start_spin_count  # Set the current spin count to the start spin count
+
+    print(f"You used the multiplier: \033[34m{multiplier_count}\033[0m times \n")
     
     if balance is None or balance == 0:
         print("No balance found or balance is zero.")
