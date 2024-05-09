@@ -253,7 +253,9 @@ def spin(balance):
         else:
             break
 
-    print(f"You are betting ${bet} ")
+    print(f"You are betting ${bet}")
+    print("\033[36m" + random.choice(quotes) + "\033[0m")
+
 
     slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
 
