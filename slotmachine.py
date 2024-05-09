@@ -7,6 +7,17 @@ BALANCE_FILE = "balance.json"
 HIGHSCORE_FILE = "highscore.json"
 SPIN_COUNT_FILE = "spin_count.json"
 
+# Define the directory for JSON files
+JSON_DIR = ".gitignore"
+
+# Ensure that the directory exists
+os.makedirs(JSON_DIR, exist_ok=True)
+
+# File paths
+BALANCE_FILE = os.path.join(JSON_DIR, "balance.json")
+HIGHSCORE_FILE = os.path.join(JSON_DIR, "highscore.json")
+SPIN_COUNT_FILE = os.path.join(JSON_DIR, "spin_count.json")
+
 def load_balance():
     if os.path.exists(BALANCE_FILE):
         with open(BALANCE_FILE, "r") as f:
