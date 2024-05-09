@@ -5,6 +5,7 @@ import sys
 
 BALANCE_FILE = "balance.json"
 HIGHSCORE_FILE = "highscore.json"
+SPIN_COUNT_FILE = "spin_count.json"
 
 def load_balance():
     if os.path.exists(BALANCE_FILE):
@@ -33,6 +34,29 @@ def print_highscore(highscore):
         print("Remember the time you had " + "\033[32m" + "$" + str(highscore) + "\033[0m" + "?")
         print("\033[36m" + "Time to double that!" + "\033[0m")
         print()
+
+def load_spin_count():
+    if os.path.exists(SPIN_COUNT_FILE):
+        with open(SPIN_COUNT_FILE, "r") as f:
+            return json.load(f)
+    else:
+        return 0  # Return 0 if the spin count file doesn't exist  
+
+# Function to save spin count to file
+def save_spin_count(spin_count):
+    with open(SPIN_COUNT_FILE, "w") as f:
+        json.dump(spin_count, f)
+
+# Global variable to keep track of spin count
+spin_counter = load_spin_count()
+
+# Function to update and save spin count
+def update_spin_count():
+    global spin_counter
+    spin_counter += 1
+    save_spin_count(spin_counter)
+
+
 
 MAX_LINES = 3
 MAX_BET = 100
@@ -390,6 +414,7 @@ def apply_multipliers(winnings):
 
 
 def spin(balance):
+    update_spin_count()
     lines = get_number_of_lines()
     bet = validate_bet(balance)
     print(f"You are betting ${bet}")
@@ -422,26 +447,44 @@ def broke(balance):
 
 def main():
     print("\nWelcome to the slot machine!\n")
+    
+    # Load spin count
+    start_spin_count = load_spin_count()
     balance = load_balance()
     highscore = load_highscore()
+    print(f"Total spins: \033[34m{start_spin_count}\033[0m \n")
     print_highscore(highscore)
+    
     if balance is None or balance == 0:
         print("No balance found or balance is zero.")
         balance = deposit()
+    
+    spin_counter = start_spin_count  # Set the current spin count to the start spin count
+    
     while True:
         print("Your balance is \033[32m$" + str(balance) + "\033[0m")
+        
         if broke(balance):  
             break
+        
         answer = input("Press enter to play (Q to quit): ")
+        
         if answer.lower() == "q":
-            print(f"You checked out with \033[32m${balance}\033[0m. Don't forget to come back!")
+            # Calculate spins made during this session
+            session_spins = spin_counter - start_spin_count
+            print(f"\nYou made \033[34m{session_spins}\033[0m spins this session.\n")
+            print(f"You checked out with \033[32m${balance}\033[0m. Thanks for playing!\n")
             sys.exit()  # Quit the application
         else:    
             balance += spin(balance)
             if balance > highscore:
                 highscore = balance
-                save_highscore(highscore)  # Save highscore after each spin
+            spin_counter += 1  # Increment spin count
+    
+    # Save spin count
+    save_spin_count(spin_counter)
     save_balance(balance)
+    save_highscore(highscore)
     print_highscore(highscore)
 
 if __name__ == "__main__":
