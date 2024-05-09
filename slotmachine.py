@@ -360,16 +360,21 @@ def apply_multipliers(winnings):
         choice = input("Do you want to use a random multiplier on your winnings? (Y/N): ").upper()
         if choice == "Y":
             new_winnings = random_multi_winnings(winnings)
+            if new_winnings > winnings:
+                print("\033[35mProfits on top of profits!\033[0m")
+                
             if new_winnings > 0:
                 print("Adjusted winnings: \033[33m$" + str(new_winnings) + "\033[0m")
             else:
                 print("Adjusted winnings: \033[33m$" + str(new_winnings) + "\033[0m")
         else:
             new_winnings = winnings
+            print("\033[36m" + random.choice(quotes_loss) + "\033[0m")
     else:
         new_winnings = 0
         print("\033[36m" + random.choice(quotes_loss) + "\033[0m")
     return new_winnings
+
 
 def spin(balance):
     lines = get_number_of_lines()
