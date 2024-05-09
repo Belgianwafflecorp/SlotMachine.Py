@@ -16,9 +16,9 @@ symbol_count = {
 }
 
 symbol_values = {
-    "@" : 50,
-    "£" : 10,
-    "$" : 5,
+    "@" : 10,
+    "£" : 5,
+    "$" : 3,
     "€" : 2,
     "§" : 0,
 }
@@ -120,9 +120,9 @@ def multi_win(winnings, winning_lines):
     if len(winning_lines) > 1:
         extra_lines = len(winning_lines) - 1
         extra_winnings = extra_lines * 0.2 * winnings
-        return winnings + extra_winnings
+        return int(winnings + extra_winnings)
     else:
-        return winnings
+        return int(winnings)
     
 
 def random_multi_winnings(winnings):
@@ -136,7 +136,9 @@ def random_multi_winnings(winnings):
         10:     0.001,       # 0.1% chance to multiply winnings by 10
         2:      0.01,        # 1% chance to double the winnings
         1.5:    0.05,        # 5% chance to add 50% of the winnings
-        0:      0.82,        # 82% chance to lose the winnings
+        1.3:    0.10,        # 10% chance to add 30% of the winnings
+        1.1:    0.22,        # 22% chance to add 10% of the winnings
+        0:      0.50,        # 82% chance to lose the winnings
         -0.1:   0.10,        # 10% chance to lose 10% of the winnings
         -0.5:   0.04         # 4% chance to lose 50% of the winnings
     }
@@ -155,6 +157,8 @@ def random_multi_winnings(winnings):
         return winnings * 1.5
     elif multiplier == 1.3:
         return winnings * 1.3
+    elif multiplier == 1.1:
+        return winnings * 1.1
     elif multiplier == -0.1:
         return winnings * 0.9
     elif multiplier == -0.5:
