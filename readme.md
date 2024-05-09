@@ -22,13 +22,13 @@ Introduces vertical and diagonal checks for winning hands. Per extra winning lin
 
 ### Prerequisites: 
 Ensure you have Python 3.x installed on your system.
-Clone or Download: Clone this repository using Git (git clone https://github.com/your-username/enhanced-blackjack.git) or download the ZIP file.
-Run the Script: Navigate to the project directory in your terminal and execute the Python script using python blackjack.py (or python3 blackjack.py if necessary).
+Clone or Download: Clone this repository using Git or download the ZIP file.
+Run the Script: Navigate to the project directory in your terminal and execute the Python script using python slotmachine.py (or python3 slotmachine.py if necessary).
 
 ### Usage:
-Follow the on-screen instructions to play the blackjack game. The game will guide you through possible actions during play.
+Follow the on-screen instructions to play the slot machine game. The game will guide you through possible actions during play.
 
-###Additional Notes:
+### Additional Notes:
 Feel free to customize the code further to suit your learning goals or preferences.
 Refer to the linked YouTube tutorial for a general overview of the underlying logic. This enhanced version incorporates additional features on top of that foundation.
 
