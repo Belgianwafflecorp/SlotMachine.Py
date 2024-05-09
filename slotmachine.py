@@ -138,7 +138,7 @@ def random_multi_winnings(winnings):
         1.5:    0.05,        # 5% chance to add 50% of the winnings
         1.3:    0.10,        # 10% chance to add 30% of the winnings
         1.1:    0.22,        # 22% chance to add 10% of the winnings
-        0:      0.50,        # 82% chance to lose the winnings
+        0:      0.50,        # 50% chance to lose the winnings
         -0.1:   0.10,        # 10% chance to lose 10% of the winnings
         -0.5:   0.04         # 4% chance to lose 50% of the winnings
     }
