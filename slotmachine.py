@@ -14,20 +14,21 @@ ROWS = 3
 COLS = 3
 
 symbol_count = {
-    "A" : 5,
-    "B" : 10,
-    "C" : 20,
-    "D" : 40,
-    "0" : 25,
+    "@" : 5,
+    "£" : 10,
+    "$" : 20,
+    "€" : 40,
+    "§" : 25,
 }
 
 symbol_values = {
-    "A" : 50,
-    "B" : 10,
-    "C" : 5,
-    "D" : 2,
-    "0" : 0,
+    "@" : 50,
+    "£" : 10,
+    "$" : 5,
+    "€" : 2,
+    "§" : 0,
 }
+
 
 def check_winnings(columns, lines, bet, values):
     winnings = 0
@@ -137,18 +138,39 @@ def get_slot_machine_spin(rows, cols, symbols):
     return columns
 
 
+slot_machine_top = """                .-------.
+            oO{-(\033[33mMACHINE\033[0m)-}Oo
+            .==============. """
+
+
+slot_machine_bottom = """            |              | __
+            | €€€ :::::::: |(  )
+            | £££ :::::::: | ||
+            | $$$ :::::::: |_||
+            |              |--'
+            |      __  === |
+            |_____/__\_____|
+           /################
+          /##################
+         |####################|
+"""
+
+
 def print_slot_machine(columns):
-    print()
-    for row in range(len(columns[0])): #for each row in the first column
-        for i, column in enumerate(columns): #for each column in the columns list
-            if i != len(columns) - 1:   #if the column is not the last column
-                print(column[row],end=" | ") # check if its not the last index to print "|"
+    print(slot_machine_top)
+    for row in range(len(columns[0])): # For each row in the first column
+        print(" " * 12, end="| ")  # Print 12 spaces and "|" at the beginning of each row
+        for i, column in enumerate(columns): # For each column in the columns list
+            if i != len(columns) - 1:   # If the column is not the last column
+                print(" " + column[row], end=" | ") # Check if it's not the last index to print "|"
             else:
-                print(column[row],end="") #if its the last index, print nothing
+                print(column[row] + " ", end=" | ") # If it's the last index, print "|" at the end of the row with additional space
 
-        print() #print a new line
+        print() # Print a new line
+    print(slot_machine_bottom)
 
 
+    
 def deposit():
     while True:
         amount = input("Enter the amount you want to deposit: $")
