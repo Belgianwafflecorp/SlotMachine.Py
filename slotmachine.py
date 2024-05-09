@@ -269,6 +269,9 @@ def get_bet():
             bet = int(bet)
             if MIN_BET <= bet <= MAX_BET:
                 break
+            elif bet > MAX_BET:
+                bet = MAX_BET
+                break
             else:
                 print(f"Please enter a bet between ${MIN_BET} and ${MAX_BET}.")
         else:
