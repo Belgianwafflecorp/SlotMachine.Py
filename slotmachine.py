@@ -133,37 +133,56 @@ def get_slot_machine_spin(rows, cols, symbols):
     return columns
 
 
-slot_machine_top = """                .-------.
+
+slot_machine_part_1 = """                .-------.
             oO{-(\033[33m\033[5mMACHINE\033[0m)-}Oo
             .==============. """
 
-
-
-slot_machine_bottom = """            |              | __
+slot_machine_part_2 = """            |--------------| __
             | €€€ :::::::: |(  )
             | £££ :::::::: | ||
-            | $$$ :::::::: |_||
-            |              |--'
-            |      __  === |
-            |_____/__\_____|
+            | $$$ :::::::: |_||"""
+            
+slot_machine_part_4 = """            |      __  === |
+            |_____[__]_____|
            /################
           /##################
-         |####################|
-"""
+         |####################|"""
+
+def slot_machine_part_3(winnings):
+    # Convert winnings to a string
+    winnings_str = str(winnings)
+    # Calculate the length of the winnings string
+    winnings_length = len(winnings_str)
+    # Calculate the number of spaces needed to fill the remaining length
+    spaces_needed = 15 - winnings_length - 1  # Subtract 1 for the space between winnings and the padding
+    # If the winnings string is longer than 15 characters, truncate it
+    if winnings_length > 15:
+        return winnings_str[:15]
+    # If the winnings string is shorter than 15 characters, pad it with spaces
+    else:
+        asci_winnings = " " * 12 +"|" + (spaces_needed - 1) * " " + "\033[33m" + winnings_str + "\033[0m" +" |--'"
+        print(asci_winnings)
+        return asci_winnings
 
 
 def print_slot_machine(columns):
-    print(slot_machine_top)
-    for row in range(len(columns[0])): # For each row in the first column
+    print(slot_machine_part_1)
+    slots = get_slot_machine_spin(ROWS, COLS, symbol_count)  # Generate slot machine spin
+    winnings, winning_lines = check_winnings(slots, MAX_LINES, MAX_BET, symbol_values)  # Calculate winnings
+    for row in range(len(columns[0])):  # For each row in the first column
         print(" " * 12, end="| ")  # Print 12 spaces and "|" at the beginning of each row
-        for i, column in enumerate(columns): # For each column in the columns list
-            if i != len(columns) - 1:   # If the column is not the last column
-                print(" " + column[row], end=" | ") # Check if it's not the last index to print "|"
+        for i, column in enumerate(columns):  # For each column in the columns list
+            if i != len(columns) - 1:  # If the column is not the last column
+                print(" " + column[row], end=" | ")  # Check if it's not the last index to print "|"
             else:
-                print(column[row] + " ", end=" | ") # If it's the last index, print "|" at the end of the row with additional space
+                print(column[row] + " ", end=" | ")  # If it's the last index, print "|" at the end of the row with additional space
+        print()  # Print a new line
+    print(slot_machine_part_2)  
+    slot_machine_part_3(winnings)
+    print(slot_machine_part_4)  
 
-        print() # Print a new line
-    print(slot_machine_bottom)
+
 
 
     
@@ -229,10 +248,12 @@ def spin(balance):
     print(f"You are betting ${bet} on {lines} lines. Total bet: ${bet}")
 
     slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
-    print_slot_machine(slots)
-    print()
 
     winnings, winning_lines = check_winnings(slots, lines, bet, symbol_values)
+
+    print_slot_machine(slots)
+    print()
+    
     print("You won \033[33m$" + str(winnings) + "\033[0m")
     print("You won on line(s):", *winning_lines) 
 
@@ -252,8 +273,6 @@ def spin(balance):
         new_winnings = 0
 
     return new_winnings - bet
-
-
 
 
 
