@@ -24,6 +24,16 @@ symbol_values = {
     "§" : 0,
 }
 
+# Define a list of quotes
+quotes = [
+    "I know you are thinking about quitting, but don't you want to double that number tho?",
+    "You are on a roll! Keep going!",
+    "You are so close to the jackpot, keep going!",
+    "You are doing great! Keep going!",
+
+]
+
+
 
 def check_winnings(columns, lines, bet, values):
     winnings = 0
@@ -280,6 +290,7 @@ def spin(balance):
 def broke(balance):
     if balance == 0:
         print("\033[33mTime to go home fren\033[0m")
+        print("We'll get that money anyway somehow")
         return True
 
 
