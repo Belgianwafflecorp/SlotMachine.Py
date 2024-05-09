@@ -1,4 +1,21 @@
 import random
+import json
+import os
+
+BALANCE_FILE = "balance.json"
+
+def load_balance():
+    if os.path.exists(BALANCE_FILE):
+        with open(BALANCE_FILE, "r") as f:
+            return json.load(f)
+    else:
+        return None  # Return None if the balance file doesn't exist
+
+def save_balance(balance):
+    with open(BALANCE_FILE, "w") as f:
+        json.dump(balance, f)
+
+
 
 MAX_LINES = 3
 MAX_BET = 100
@@ -246,18 +263,12 @@ def deposit():
             if amount > 1000:
                 print("Don't get over your head.")
                 amount = 1000
-                break
-                
             elif amount <= 0:
                 print("Please enter a positive amount.")
-
-            else:
-                break
-
+            break
         else:
             print("Please enter a valid amount.")
     return amount
-
 
 def get_number_of_lines():
    # while True:
@@ -353,7 +364,10 @@ def broke(balance):
 
 def main():
     print("Welcome to the slot machine!")
-    balance = deposit()
+    balance = load_balance()
+    if balance is None or balance == 0:
+        print("No balance found or balance is zero.")
+        balance = deposit()
     while True:
         print("Your balance is \033[32m$" + str(balance) + "\033[0m")
         if broke(balance):  
@@ -363,8 +377,11 @@ def main():
             print(f"You checked out with ${balance}. Thanks for playing!")
             break
         else:    
-         balance += spin(balance)
+            balance += spin(balance)
+    save_balance(balance)
 
+
+if __name__ == "__main__":
+    main()
 
 main()
-
