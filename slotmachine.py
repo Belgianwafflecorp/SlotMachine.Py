@@ -5,7 +5,6 @@ MAX_BET = 100
 MIN_BET = 1
 
 ROWS = 3
-
 COLS = 3
 
 symbol_count = {
@@ -65,6 +64,17 @@ quotes_loss = [
     "Your past does not determine your future; keep spinning towards your goals.",
 ]
 
+def quit_1(balance):
+    answer = input("I don't think you want to quit now (type QUIT to stop): ")
+    if answer.lower() == "quit":
+        True
+        print(f"You checked out with ${balance}. Thanks for playing!")
+    else:
+        False
+        print("that's the spirit!")
+        
+
+        
 
 
 def check_winnings(columns, lines, bet, values):
@@ -278,13 +288,20 @@ def get_bet():
             print("Please enter a valid bet.")
     return bet
 
+def check_balance(balance):
+    while True:
+        bet = get_bet()
+        if bet > balance:
+            print(f"You don't have enough money to make that bet. Your balance is ${balance}")
+        else:
+            break
 
 def spin(balance):
     lines = get_number_of_lines()
     while True:
         bet = get_bet()
         if bet > balance:
-            print(f"You don't have enough money to make that bet. Your balance is ${balance}.")
+            print(f"You don't have enough money to make that bet. Your balance is ${balance}")
         else:
             break
 
@@ -343,7 +360,8 @@ def main():
         if answer.lower() == "q":
             print(f"You checked out with ${balance}. Thanks for playing!")
             break
-        balance += spin(balance)
+        else:    
+         balance += spin(balance)
 
 
 main()
