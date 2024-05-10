@@ -74,16 +74,25 @@ def load_multiplier_count():
         with open(MULTIPLIER_COUNT_FILE, "r") as f:
             return json.load(f)
     else:
-        return 0
+        return 0  # Return 0 if the multiplier count file doesn't exist  
 
+# Function to save multiplier count to file
 def save_multiplier_count(multiplier_count):
     with open(MULTIPLIER_COUNT_FILE, "w") as f:
-        json.dump(f)
+        json.dump(multiplier_count, f)
 
-def increment_multiplier_count():
-    multiplier_count = load_multiplier_count()
-    multiplier_count += 1
-    save_multiplier_count(multiplier_count)
+# Global variable to keep track of multiplier count
+multiplier_counter = load_multiplier_count()
+
+# Function to update and save multiplier count
+def update_multiplier_count():
+    global multiplier_counter
+    multiplier_counter += 1
+    save_multiplier_count(multiplier_counter)
+        
+def print_multiplier_count(multiplier_count):
+    print("You've used the multiplier " + "\033[32m" + str(multiplier_count) + "\033[0m" + " times. \n")
+        
 
 
 MAX_LINES = 3
@@ -412,7 +421,7 @@ def apply_multipliers(winnings):
         print("\033[36m" + random.choice(quotes_win) + "\033[0m")
         choice = input("Do you want to use a random multiplier on your winnings? (Y/N): ").upper()
         if choice == "Y":
-            increment_multiplier_count()
+            update_multiplier_count()
             new_winnings = random_multi_winnings(winnings)
             print_multiplier_message(winnings, new_winnings)
             if new_winnings > 0:
@@ -426,6 +435,7 @@ def apply_multipliers(winnings):
         new_winnings = 0
         print("\033[36m" + random.choice(quotes_loss) + "\033[0m")
     return new_winnings
+
 
 def check_spin_counter(start_spin_count):
     if spin_counter > 1000000:
@@ -503,7 +513,7 @@ def main():
 
     spin_counter = start_spin_count  # Set the current spin count to the start spin count
 
-    print(f"You used the multiplier: \033[34m{multiplier_count}\033[0m times \n")
+    print_multiplier_count(multiplier_count)
     
     if balance is None or balance == 0:
         print("No balance found or balance is zero.")
