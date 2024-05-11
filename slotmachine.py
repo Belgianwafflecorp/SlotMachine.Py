@@ -408,6 +408,7 @@ def spin(balance):
 
 def broke(balance):
     if balance == 0:
+        json_fm_instance.update_broke_counter()
         print("\033[33mTime to go home fren\033[0m")
         print("We'll get that money anyway somehow")
         return True
@@ -422,6 +423,7 @@ def main():
     balance = json_fm_instance.load_balance()
     highscore = json_fm_instance.load_highscore()
     multiplier_count = json_fm_instance.load_multiplier_count()
+    broke_counter = json_fm_instance.load_broke_counter()
 
     print(f"Total spins: \033[34m{start_spin_count}\033[0m")
     check_spin_counter(start_spin_count)
@@ -430,6 +432,8 @@ def main():
     spin_counter = start_spin_count  # Set the current spin count to the start spin count
 
     json_fm_instance.print_multiplier_count(multiplier_count)
+
+    json_fm_instance.print_broke_counter(broke_counter)
     
     if balance is None or balance == 0:
         print("No balance found or balance is zero.")
@@ -458,11 +462,11 @@ def main():
                 highscore = balance
             spin_counter += 1  # Increment spin count
     
-    # Save spin count
+    # Save Json files
     json_fm_instance.save_spin_count(spin_counter)
     json_fm_instance.save_balance(balance)
     json_fm_instance.save_highscore(highscore)
-    json_fm_instance.print_highscore(highscore)
+    json_fm_instance.save_broke_counter(broke_counter)
 
 if __name__ == "__main__":
     main()

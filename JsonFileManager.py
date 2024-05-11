@@ -73,6 +73,25 @@ class JsonFileManager:
         print("You've used the multiplier " + "\033[32m" + str(multiplier_count) + "\033[0m" + " times. \n")
 
 
+# BROKE COUNTER
+    def load_broke_counter(self):
+        return self.load_data("broke_counter.json") or 0
+    
+    def save_broke_counter(self, broke_counter):
+        self.save_data("broke_counter.json", broke_counter)
+
+    def update_broke_counter(self):
+        broke_counter = self.load_broke_counter()
+        broke_counter += 1
+        self.save_broke_counter(broke_counter)
+
+    def print_broke_counter(self, broke_counter):
+        if broke_counter != 0:
+            print("You've gone broke " + "\033[31m" + str(broke_counter) + "\033[0m" + " times. \n")
+        else:
+             print("Do you know you never went broke with us? \n")
+
+
 # Define the directory for JSON files
 JSON_DIR = ".gitignore"
 
