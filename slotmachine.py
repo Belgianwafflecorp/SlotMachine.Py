@@ -4,6 +4,12 @@ import os
 import sys
 import JsonFileManager as json_fm
 
+# Define the directory for JSON files
+JSON_DIR = ".gitignore"
+
+# Create an instance of JsonFileManager
+json_fm_instance = json_fm.JsonFileManager(JSON_DIR)
+
 
 MAX_LINES = 3
 MAX_BET = 100
@@ -329,9 +335,9 @@ def print_multiplier_message(winnings, new_winnings):
 def apply_multipliers(winnings):
     if winnings > 0:
         print("\033[36m" + random.choice(quotes_win) + "\033[0m")
-        choice = input("Do you want to use a random multiplier on your winnings? (Y/N): ").upper()
+        choice = input("Do you want to use a random multiplier on your winnings? (N to skip): ").upper()
         if choice != "N":
-            json_fm.update_multiplier_count()
+            json_fm_instance.update_multiplier_count()
             new_winnings = random_multi_winnings(winnings)
             print_multiplier_message(winnings, new_winnings)
             if new_winnings > 0:
@@ -348,19 +354,19 @@ def apply_multipliers(winnings):
 
 
 def check_spin_counter(start_spin_count):
-    if json_fm.spin_counter > 1000000:
+    if json_fm_instance.spin_counter > 1000000:
         print("\033[36mA FOOKIN LEGEND, that's what you are!\033[0m\n")
-    elif json_fm.spin_counter > 250000:
+    elif json_fm_instance.spin_counter > 250000:
         print("\033[36mHigh roller club member\033[0m\n")
-    elif json_fm.spin_counter > 100000:
+    elif json_fm_instance.spin_counter > 100000:
         print("\033[36mOne of the VIP's\033[0m\n")
-    elif json_fm.spin_counter > 50000:
+    elif json_fm_instance.spin_counter > 50000:
         print("\033[36mWe have a gambler here\033[0m\n")
-    elif json_fm.spin_counter > 10000:
+    elif json_fm_instance.spin_counter > 10000:
         print("\033[36mWelcome back fren\033[0m\n")
-    elif json_fm.spin_counter > 5000:
+    elif json_fm_instance.spin_counter > 5000:
         print("\033[36mWelcome back rookie\033[0m\n")
-    elif json_fm.spin_counter > 1000:
+    elif json_fm_instance.spin_counter > 1000:
         print("\033[36mWelcome back newbie\033[0m\n")
     else:
         print("\033[36mStill new here i see\033[0m\n")
@@ -377,7 +383,7 @@ def check_session_spins(session_spins):
         print("\033[36mNot even 100 spins. You can do better!\033[0m")
 
 def spin(balance):
-    json_fm.update_spin_count()
+    json_fm_instance.update_spin_count()
     lines = get_number_of_lines()
     bet = validate_bet(balance)
     print(f"You are betting ${bet}")
@@ -412,18 +418,18 @@ def main():
     print("\nWelcome to the slot machine!\n")
     
     # Load spin count
-    start_spin_count = json_fm.load_spin_count()
-    balance = json_fm.load_balance()
-    highscore = json_fm.load_highscore()
-    multiplier_count = json_fm.load_multiplier_count()
+    start_spin_count = json_fm_instance.load_spin_count()
+    balance = json_fm_instance.load_balance()
+    highscore = json_fm_instance.load_highscore()
+    multiplier_count = json_fm_instance.load_multiplier_count()
 
     print(f"Total spins: \033[34m{start_spin_count}\033[0m")
     check_spin_counter(start_spin_count)
-    json_fm.print_highscore(highscore)
+    json_fm_instance.print_highscore(highscore)
 
     spin_counter = start_spin_count  # Set the current spin count to the start spin count
 
-    json_fm.print_multiplier_count(multiplier_count)
+    json_fm_instance.print_multiplier_count(multiplier_count)
     
     if balance is None or balance == 0:
         print("No balance found or balance is zero.")
@@ -453,10 +459,10 @@ def main():
             spin_counter += 1  # Increment spin count
     
     # Save spin count
-    json_fm.save_spin_count(spin_counter)
-    json_fm.save_balance(balance)
-    json_fm.save_highscore(highscore)
-    json_fm.print_highscore(highscore)
+    json_fm_instance.save_spin_count(spin_counter)
+    json_fm_instance.save_balance(balance)
+    json_fm_instance.save_highscore(highscore)
+    json_fm_instance.print_highscore(highscore)
 
 if __name__ == "__main__":
     main()
