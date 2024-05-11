@@ -330,7 +330,7 @@ def apply_multipliers(winnings):
     if winnings > 0:
         print("\033[36m" + random.choice(quotes_win) + "\033[0m")
         choice = input("Do you want to use a random multiplier on your winnings? (Y/N): ").upper()
-        if choice == "Y":
+        if choice != "N":
             json_fm.update_multiplier_count()
             new_winnings = random_multi_winnings(winnings)
             print_multiplier_message(winnings, new_winnings)
