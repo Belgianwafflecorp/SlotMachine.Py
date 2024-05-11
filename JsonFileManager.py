@@ -11,6 +11,8 @@ class JsonFileManager:
         self.spin_counter = self.load_spin_count()
         self.multiplier_counter = self.load_multiplier_count()
 
+
+# BALANCE
     def load_data(self, filename):
         filepath = os.path.join(self.directory, filename)
         if os.path.exists(filepath):
@@ -30,12 +32,21 @@ class JsonFileManager:
     def save_balance(self, balance):
         self.save_data("balance.json", balance)
 
+
+# HIGHSCORE
     def load_highscore(self):
         return self.load_data("highscore.json") or 0
 
     def save_highscore(self, highscore):
         self.save_data("highscore.json", highscore)
 
+    def print_highscore(self, highscore):
+        if highscore != 0:
+            print("Remember the time you had " + "\033[32m" + "$" + str(highscore) + "\033[0m" + "?")
+            print("\033[36m" + "Time to double that!" + "\033[0m \n")
+            
+
+# SPIN COUNT
     def load_spin_count(self):
         return self.load_data("spin_count.json") or 0
 
@@ -46,6 +57,8 @@ class JsonFileManager:
         self.spin_counter += 1
         self.save_spin_count()
 
+
+# MULTIPLIER COUNT
     def load_multiplier_count(self):
         return self.load_data("multiplier_count.json") or 0
 
@@ -56,14 +69,9 @@ class JsonFileManager:
         self.multiplier_counter += 1
         self.save_multiplier_count()
 
-    def print_highscore(self, highscore):
-        if highscore != 0:
-            print("Remember the time you had " + "\033[32m" + "$" + str(highscore) + "\033[0m" + "?")
-            print("\033[36m" + "Time to double that!" + "\033[0m")
-            print()
-
     def print_multiplier_count(self, multiplier_count):
         print("You've used the multiplier " + "\033[32m" + str(multiplier_count) + "\033[0m" + " times. \n")
+
 
 # Define the directory for JSON files
 JSON_DIR = ".gitignore"
