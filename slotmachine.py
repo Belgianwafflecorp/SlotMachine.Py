@@ -2,97 +2,7 @@ import random
 import json
 import os
 import sys
-
-BALANCE_FILE = "balance.json"
-HIGHSCORE_FILE = "highscore.json"
-SPIN_COUNT_FILE = "spin_count.json"
-MULTIPLIER_COUNT_FILE = "multiplier_count.json"
-
-# Define the directory for JSON files
-JSON_DIR = ".gitignore"
-
-# Ensure that the directory exists
-os.makedirs(JSON_DIR, exist_ok=True)
-
-# File paths
-BALANCE_FILE = os.path.join(JSON_DIR, "balance.json")
-HIGHSCORE_FILE = os.path.join(JSON_DIR, "highscore.json")
-SPIN_COUNT_FILE = os.path.join(JSON_DIR, "spin_count.json")
-MULTIPLIER_COUNT_FILE = os.path.join(JSON_DIR, "multiplier_count.json")
-
-def load_balance():
-    if os.path.exists(BALANCE_FILE):
-        with open(BALANCE_FILE, "r") as f:
-            return json.load(f)
-    else:
-        return None  # Return None if the balance file doesn't exist
-
-def save_balance(balance):
-    with open(BALANCE_FILE, "w") as f:
-        json.dump(balance, f)
-
-def load_highscore():
-    if os.path.exists(HIGHSCORE_FILE):
-        with open(HIGHSCORE_FILE, "r") as f:
-            return json.load(f)
-    else:
-        return 0  # Return 0 if the highscore file doesn't exist
-
-def save_highscore(highscore):
-    with open(HIGHSCORE_FILE, "w") as f:
-        json.dump(highscore, f)
-
-def print_highscore(highscore):
-    if highscore != 0:
-        print("Remember the time you had " + "\033[32m" + "$" + str(highscore) + "\033[0m" + "?")
-        print("\033[36m" + "Time to double that!" + "\033[0m")
-        print()
-
-def load_spin_count():
-    if os.path.exists(SPIN_COUNT_FILE):
-        with open(SPIN_COUNT_FILE, "r") as f:
-            return json.load(f)
-    else:
-        return 0  # Return 0 if the spin count file doesn't exist  
-
-# Function to save spin count to file
-def save_spin_count(spin_count):
-    with open(SPIN_COUNT_FILE, "w") as f:
-        json.dump(spin_count, f)
-
-# Global variable to keep track of spin count
-spin_counter = load_spin_count()
-
-# Function to update and save spin count
-def update_spin_count():
-    global spin_counter
-    spin_counter += 1
-    save_spin_count(spin_counter)
-
-def load_multiplier_count():
-    if os.path.exists(MULTIPLIER_COUNT_FILE):
-        with open(MULTIPLIER_COUNT_FILE, "r") as f:
-            return json.load(f)
-    else:
-        return 0  # Return 0 if the multiplier count file doesn't exist  
-
-# Function to save multiplier count to file
-def save_multiplier_count(multiplier_count):
-    with open(MULTIPLIER_COUNT_FILE, "w") as f:
-        json.dump(multiplier_count, f)
-
-# Global variable to keep track of multiplier count
-multiplier_counter = load_multiplier_count()
-
-# Function to update and save multiplier count
-def update_multiplier_count():
-    global multiplier_counter
-    multiplier_counter += 1
-    save_multiplier_count(multiplier_counter)
-        
-def print_multiplier_count(multiplier_count):
-    print("You've used the multiplier " + "\033[32m" + str(multiplier_count) + "\033[0m" + " times. \n")
-        
+import JsonFileManager as json_fm
 
 
 MAX_LINES = 3
@@ -421,7 +331,7 @@ def apply_multipliers(winnings):
         print("\033[36m" + random.choice(quotes_win) + "\033[0m")
         choice = input("Do you want to use a random multiplier on your winnings? (Y/N): ").upper()
         if choice == "Y":
-            update_multiplier_count()
+            json_fm.update_multiplier_count()
             new_winnings = random_multi_winnings(winnings)
             print_multiplier_message(winnings, new_winnings)
             if new_winnings > 0:
@@ -438,19 +348,19 @@ def apply_multipliers(winnings):
 
 
 def check_spin_counter(start_spin_count):
-    if spin_counter > 1000000:
+    if json_fm.spin_counter > 1000000:
         print("\033[36mA FOOKIN LEGEND, that's what you are!\033[0m\n")
-    elif spin_counter > 250000:
+    elif json_fm.spin_counter > 250000:
         print("\033[36mHigh roller club member\033[0m\n")
-    elif spin_counter > 100000:
+    elif json_fm.spin_counter > 100000:
         print("\033[36mOne of the VIP's\033[0m\n")
-    elif spin_counter > 50000:
+    elif json_fm.spin_counter > 50000:
         print("\033[36mWe have a gambler here\033[0m\n")
-    elif spin_counter > 10000:
+    elif json_fm.spin_counter > 10000:
         print("\033[36mWelcome back fren\033[0m\n")
-    elif spin_counter > 5000:
+    elif json_fm.spin_counter > 5000:
         print("\033[36mWelcome back rookie\033[0m\n")
-    elif spin_counter > 1000:
+    elif json_fm.spin_counter > 1000:
         print("\033[36mWelcome back newbie\033[0m\n")
     else:
         print("\033[36mStill new here i see\033[0m\n")
@@ -467,7 +377,7 @@ def check_session_spins(session_spins):
         print("\033[36mNot even 100 spins. You can do better!\033[0m")
 
 def spin(balance):
-    update_spin_count()
+    json_fm.update_spin_count()
     lines = get_number_of_lines()
     bet = validate_bet(balance)
     print(f"You are betting ${bet}")
@@ -502,18 +412,18 @@ def main():
     print("\nWelcome to the slot machine!\n")
     
     # Load spin count
-    start_spin_count = load_spin_count()
-    balance = load_balance()
-    highscore = load_highscore()
-    multiplier_count = load_multiplier_count()
+    start_spin_count = json_fm.load_spin_count()
+    balance = json_fm.load_balance()
+    highscore = json_fm.load_highscore()
+    multiplier_count = json_fm.load_multiplier_count()
 
     print(f"Total spins: \033[34m{start_spin_count}\033[0m")
     check_spin_counter(start_spin_count)
-    print_highscore(highscore)
+    json_fm.print_highscore(highscore)
 
     spin_counter = start_spin_count  # Set the current spin count to the start spin count
 
-    print_multiplier_count(multiplier_count)
+    json_fm.print_multiplier_count(multiplier_count)
     
     if balance is None or balance == 0:
         print("No balance found or balance is zero.")
@@ -543,13 +453,13 @@ def main():
             spin_counter += 1  # Increment spin count
     
     # Save spin count
-    save_spin_count(spin_counter)
-    save_balance(balance)
-    save_highscore(highscore)
-    print_highscore(highscore)
+    json_fm.save_spin_count(spin_counter)
+    json_fm.save_balance(balance)
+    json_fm.save_highscore(highscore)
+    json_fm.print_highscore(highscore)
 
 if __name__ == "__main__":
     main()
 
-main()
+
 
