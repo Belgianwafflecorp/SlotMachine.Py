@@ -6,7 +6,7 @@ import JsonFileManager as json_fm
 from controls import PlayerControls
 
 # Define the directory for JSON files
-JSON_DIR = ".gitignore"
+JSON_DIR = "PLAYER_DATA"
 
 # Create an instance of JsonFileManager
 json_fm_instance = json_fm.JsonFileManager(JSON_DIR)
