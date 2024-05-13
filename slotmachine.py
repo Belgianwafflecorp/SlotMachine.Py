@@ -263,8 +263,10 @@ def deposit():
         amount = input("Enter the amount you want to deposit: $")
         if amount.isdigit():
             amount = int(amount)
-            if amount > 1000:
-                print("Don't get over your head.")
+            if amount == 1069:
+                print("Cheeky basterd. I'll let that one slide.")
+            elif amount > 1000 and amount != 1069:
+                print("Don't get over your head. You get $1000 to start with.")
                 amount = 1000
             elif amount <= 0:
                 print("Please enter a positive amount.")
@@ -401,6 +403,7 @@ def spin(balance):
 def broke(balance):
     if balance == 0:
         json_fm_instance.update_broke_counter()
+        json_fm_instance.save_balance(balance)
         print("\033[33mTime to go home fren\033[0m")
         print("We'll get that money anyway somehow")
         return True
