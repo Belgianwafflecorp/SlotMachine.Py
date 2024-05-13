@@ -431,7 +431,6 @@ def main():
         print("No balance found or balance is zero.")
         balance = deposit()
     
-    spin_counter = start_spin_count  # Set the current spin count to the start spin count
     
     while True:
         print("Your balance is \033[32m$" + str(balance) + "\033[0m")
@@ -442,7 +441,7 @@ def main():
         answer = input("Press enter to play (Q to quit): ")
         
         if answer.lower() == "q":
-            player_controls.quit(balance, spin_counter, start_spin_count)
+            player_controls.quit(start_spin_count, spin_counter, balance)
         else:    
             balance += spin(balance)
             if balance > highscore:

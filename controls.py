@@ -13,13 +13,12 @@ class PlayerControls:
         print(" -help  : Show available controls and their descriptions.")
         print(" -quit  : Quit the game.")
         print(" -stats : Show your statistics.")
-        print(" -allin : Exactly what you think, going all in!.")
+        print(" -allin : Exactly what you think, going all in!")
 
-    def quit(self):
+    def quit(self,start_spin_count, spin_counter, balance):
          # Calculate spins made during this session
             session_spins = self.spin_counter - self.start_spin_count
             print(f"\nYou made \033[34m{session_spins}\033[0m spins this session.\n")
-            slotmachine.check_session_spins(session_spins)
             print(f"You checked out with \033[32m${self.balance}\033[0m. Thanks for playing!\n")
             sys.exit()  # Quit the application
 
