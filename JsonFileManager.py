@@ -1,6 +1,12 @@
 import os
 import json
 
+# Define the directory for JSON files
+JSON_DIR = "PLAYER_DATA"
+
+# Ensure that the directory exists
+os.makedirs(JSON_DIR, exist_ok=True)
+
 class JsonFileManager:
     def __init__(self, directory):
         self.directory = directory
@@ -91,12 +97,6 @@ class JsonFileManager:
         else:
              print("Do you know you never went broke with us? \n")
 
-
-# Define the directory for JSON files
-JSON_DIR = ".gitignore"
-
-# Ensure that the directory exists
-os.makedirs(JSON_DIR, exist_ok=True)
 
 # Initialize the JsonFileManager instance
 jsonFileManager = JsonFileManager(JSON_DIR)
