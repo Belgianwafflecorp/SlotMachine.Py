@@ -264,7 +264,7 @@ def deposit():
         if amount.isdigit():
             amount = int(amount)
             if amount == 1069:
-                print("Cheeky basterd. I'll let that one slide.")
+                print("\nCheeky basterd. I'll let that one slide.\n")
             elif amount > 1000 and amount != 1069:
                 print("Don't get over your head. You get $1000 to start with.")
                 amount = 1000
