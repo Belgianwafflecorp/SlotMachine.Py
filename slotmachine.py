@@ -366,13 +366,13 @@ def check_spin_counter(start_spin_count):
 
 def check_session_spins(session_spins):
     if session_spins > 1000:
-        print("\033[36mYou've spun the reels over 1000 times! FOOKIN LEGEND!!!\033[0m")
+        print("\033[36mYou've spun the reels over 1000 times! FOOKIN LEGEND!!!\033[0m \n")
     elif session_spins > 500:
-        print("\033[36mYou've spun the reels over 500 times! Thats the spirit!\033[0m")
+        print("\033[36mYou've spun the reels over 500 times! Thats the spirit!\033[0m \n")
     elif session_spins > 100:
-        print("\033[36mYou've only spun the reels over 100 times. Thats below average!\033[0m")
+        print("\033[36mYou've only spun the reels over 100 times. Thats below average!\033[0m \n")
     elif session_spins < 100:
-        print("\033[36mNot even 100 spins. You can do better!\033[0m")
+        print("\033[36mNot even 100 spins. You can do better!\033[0m \n")
 
 def spin(balance):
     json_fm_instance.update_spin_count()
@@ -442,7 +442,8 @@ def main():
         
         if answer.lower() == "q":
             session_spins = spin_counter - start_spin_count
-            print(f"\nYou made \033[34m{session_spins}\033[0m spins this session.\n")
+            print(f"\nYou made \033[34m{session_spins}\033[0m spins this session.")
+            check_session_spins(session_spins)
             print(f"You checked out with \033[32m${balance}\033[0m. Thanks for playing!\n")
             json_fm_instance.save_balance(balance)
             player_controls.quit()
