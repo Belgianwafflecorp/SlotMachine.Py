@@ -430,10 +430,10 @@ def main():
     if balance is None or balance == 0:
         print("No balance found or balance is zero.")
         balance = deposit()
-    
+    else:
+        json_fm_instance.print_balance(balance)
     
     while True:
-        print("Your balance is \033[32m$" + str(balance) + "\033[0m")
         
         if broke(balance):  
             break
@@ -441,7 +441,11 @@ def main():
         answer = input("Press enter to play (Q to quit): ")
         
         if answer.lower() == "q":
-            player_controls.quit(start_spin_count, spin_counter, balance)
+            session_spins = spin_counter - start_spin_count
+            print(f"\nYou made \033[34m{session_spins}\033[0m spins this session.\n")
+            print(f"You checked out with \033[32m${balance}\033[0m. Thanks for playing!\n")
+            json_fm_instance.save_balance(balance)
+            player_controls.quit()
         else:    
             balance += spin(balance)
             if balance > highscore:

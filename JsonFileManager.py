@@ -17,8 +17,13 @@ class JsonFileManager:
         self.spin_counter = self.load_spin_count()
         self.multiplier_counter = self.load_multiplier_count()
 
+# SAVE DATA
+    def save_data(self, filename, data):
+        filepath = os.path.join(self.directory, filename)
+        with open(filepath, "w") as f:
+            json.dump(data, f)
 
-# BALANCE
+# LOAD DATA
     def load_data(self, filename):
         filepath = os.path.join(self.directory, filename)
         if os.path.exists(filepath):
@@ -27,16 +32,15 @@ class JsonFileManager:
         else:
             return None
 
-    def save_data(self, filename, data):
-        filepath = os.path.join(self.directory, filename)
-        with open(filepath, "w") as f:
-            json.dump(data, f)
-
+# BALANCE
     def load_balance(self):
-        return self.load_data("balance.json")
+        return self.load_data("balance.json") or 0
 
     def save_balance(self, balance):
         self.save_data("balance.json", balance)
+
+    def print_balance(self, balance):
+        print(f"Your balance is: \033[32m${balance}\033[0m \n")
 
 
 # HIGHSCORE
