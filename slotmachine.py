@@ -392,8 +392,8 @@ def spin(balance):
     print(slot_machine_part_4)
     print()
     
-    print("You won \033[33m$" + str(winnings) + "\033[0m")
-    print("You won on line(s):", *winning_lines) 
+    if winning_lines and winnings > 0:
+        print(f"You won \033[33m${winnings}\033[0m")
 
     return apply_multipliers(winnings) - bet
 
