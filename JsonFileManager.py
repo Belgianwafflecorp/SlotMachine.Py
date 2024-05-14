@@ -52,8 +52,8 @@ class JsonFileManager:
 
     def print_highscore(self, highscore):
         if highscore != 0:
-            print("Remember the time you had " + "\033[32m" + "$" + str(highscore) + "\033[0m" + "?")
-            print("\033[36m" + "Time to double that!" + "\033[0m \n")
+            print(f"Remember the time you had \033[32m${highscore}\033[0m?")
+            print(f"\033[36mTime to double that!\033[0m \n")
             
 
 # SPIN COUNT
@@ -80,7 +80,7 @@ class JsonFileManager:
         self.save_multiplier_count()
 
     def print_multiplier_count(self, multiplier_count):
-        print("You've used the multiplier " + "\033[32m" + str(multiplier_count) + "\033[0m" + " times. \n")
+        print(f"You've used the multiplier \033[34m{multiplier_count}\033[0m times. \n")
 
 
 # BROKE COUNTER
@@ -97,7 +97,7 @@ class JsonFileManager:
 
     def print_broke_counter(self, broke_counter):
         if broke_counter != 0:
-            print("You've gone broke " + "\033[31m" + str(broke_counter) + "\033[0m" + " times. \n")
+            print(f"You've gone broke \033[31m{broke_counter}\033[0m times. \n")
         else:
              print("Do you know you never went broke with us? \n")
 
@@ -119,13 +119,13 @@ class JsonFileManager:
 
     def print_maximum_bets(self, dealer_lv):
         if dealer_lv == 0:
-            print(f"Your maximum bets are \033[32m100\033[0m. \n")
+            print(f"Your maximum bets are \033[34m100\033[0m. \n")
         elif dealer_lv == 1:
-            print(f"Your maximum bets are \033[32m1000\033[0m. \n")
+            print(f"Your maximum bets are \033[34m1000\033[0m. \n")
         elif dealer_lv == 2:
-            print(f"Your maximum bets are \033[32m5000\033[0m. \n")
+            print(f"Your maximum bets are \033[34m5000\033[0m. \n")
         elif dealer_lv == 3:
-            print(f"Your maximum bets are \033[32m10000\033[0m. \n")
+            print(f"Your maximum bets are \033[34m10000\033[0m. \n")
 
     # define the max bet
     def load_max_bet(self):

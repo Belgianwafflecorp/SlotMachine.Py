@@ -11,7 +11,7 @@ JSON_DIR = "PLAYER_DATA"
 # Create an instance of JsonFileManager
 json_fm_instance = json_fm.JsonFileManager(JSON_DIR)
 # Create an instance of PlayerControls
-player_controls = PlayerControls(json_fm_instance.load_balance(), json_fm_instance.load_spin_count(), json_fm_instance.load_spin_count())
+player_controls = PlayerControls(json_fm_instance.load_balance(), json_fm_instance.load_spin_count(), json_fm_instance)
 
 MAX_LINES = 3
 MIN_BET = 1
@@ -200,9 +200,9 @@ slot_machine_part_2 = """            |--------------| __
             | $$$ :::::::: |_||"""
             
 slot_machine_part_4 = """            |      __  === |
-            |_____[__]_____|
-           /################
-          /##################
+            |_____/__\\_____|
+           /################\\
+          /##################\\
          |####################|"""
 
 def slot_machine_part_3(winnings):
@@ -443,21 +443,33 @@ def main():
         if broke(balance):  
             break
         
-        answer = input("Press enter to play (Q to quit): ")
-        
-        if answer.lower() == "q":
-            session_spins = spin_counter - start_spin_count
-            print(f"\nYou made \033[34m{session_spins}\033[0m spins this session.")
-            check_session_spins(session_spins)
-            print(f"You checked out with \033[32m${balance}\033[0m. Thanks for playing!\n")
-            json_fm_instance.save_balance(balance)
-            player_controls.quit()
-        else:    
-            balance += spin(balance)
-            if balance > highscore:
-                highscore = balance
-                json_fm_instance.save_highscore(highscore)
-            spin_counter += 1  # Increment spin count
+        while True:
+            answer = input("Press enter to play ( or type -help for more commands): ")
+            player_controls.control_check(answer ,start_spin_count)
+            if answer == "":
+                break
+            else:
+                continue
+
+        # if answer.lower() == "q":
+        #     session_spins = spin_counter - start_spin_count
+        #     print(f"\nYou made \033[34m{session_spins}\033[0m spins this session.")
+        #     check_session_spins(session_spins)
+        #     print(f"You checked out with \033[32m${balance}\033[0m. Thanks for playing!\n")
+        #     json_fm_instance.save_balance(balance)
+        #     player_controls.quit()
+        # else:    
+        #     balance += spin(balance)
+        #     if balance > highscore:
+        #         highscore = balance
+        #         json_fm_instance.save_highscore(highscore)
+        #     spin_counter += 1  # Increment spin count
+
+        balance += spin(balance)
+        if balance > highscore:
+             highscore = balance
+             json_fm_instance.save_highscore(highscore)
+        spin_counter += 1  # Increment spin count
     
     # Save Json files
     json_fm_instance.save_spin_count(spin_counter)
