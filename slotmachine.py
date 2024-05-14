@@ -14,7 +14,6 @@ json_fm_instance = json_fm.JsonFileManager(JSON_DIR)
 player_controls = PlayerControls(json_fm_instance.load_balance(), json_fm_instance.load_spin_count(), json_fm_instance.load_spin_count())
 
 MAX_LINES = 3
-MAX_BET = 100
 MIN_BET = 1
 
 ROWS = 3
@@ -226,7 +225,7 @@ def slot_machine_part_3(winnings):
 def print_slot_machine(columns):
     print(slot_machine_part_1)
     slots = get_slot_machine_spin(ROWS, COLS, symbol_count)  # Generate slot machine spin
-    winnings, winning_lines = check_winnings(slots, MAX_LINES, MAX_BET, symbol_values)  # Calculate winnings
+    winnings, winning_lines = check_winnings(slots, MAX_LINES, json_fm_instance.load_max_bet(), symbol_values)  # Calculate winnings
     for row in range(len(columns[0])):  # For each row in the first column
         print(" " * 12, end="|   ")  # Print 12 spaces and "|" at the beginning of each row
         for i, column in enumerate(columns):  # For each column in the columns list
@@ -282,16 +281,16 @@ def get_number_of_lines():
 
 def get_bet():
     while True:
-        bet = input(f"How much do you want to bet? (${MIN_BET} and ${MAX_BET})? $")
+        bet = input(f"How much do you want to bet? (${MIN_BET} and ${json_fm_instance.load_max_bet()})? $")
         if bet.isdigit():
             bet = int(bet)
-            if MIN_BET <= bet <= MAX_BET:
+            if MIN_BET <= bet <= json_fm_instance.load_max_bet():
                 break
-            elif bet > MAX_BET:
-                bet = MAX_BET
+            elif bet > json_fm_instance.load_max_bet():
+                bet = json_fm_instance.load_max_bet()
                 break
             else:
-                print(f"Please enter a bet between ${MIN_BET} and ${MAX_BET}.")
+                print(f"Please enter a bet between ${MIN_BET} and ${json_fm_instance.load_max_bet()}.")
         else:
             print("Please enter a valid bet.")
     return bet
@@ -413,12 +412,13 @@ def broke(balance):
 def main():
     print("\nWelcome to the slot machine!\n")
     
-    # Load spin count
+    # Load PLAYER_DATA
     start_spin_count = json_fm_instance.load_spin_count()
     balance = json_fm_instance.load_balance()
     highscore = json_fm_instance.load_highscore()
     multiplier_count = json_fm_instance.load_multiplier_count()
     broke_counter = json_fm_instance.load_broke_counter()
+    dealer_lv = json_fm_instance.load_dealer_lv()
 
     print(f"Total spins: \033[34m{start_spin_count}\033[0m")
     check_spin_counter(start_spin_count)
@@ -427,6 +427,8 @@ def main():
     spin_counter = start_spin_count  # Set the current spin count to the start spin count
 
     json_fm_instance.print_multiplier_count(multiplier_count)
+
+    json_fm_instance.print_maximum_bets(dealer_lv)
 
     json_fm_instance.print_broke_counter(broke_counter)
     

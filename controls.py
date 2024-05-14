@@ -10,10 +10,11 @@ class PlayerControls:
 
     def print_help(self):
         print("\n\tAvailable controls:")
-        print(" -help  : Show available controls and their descriptions.")
-        print(" -quit  : Quit the game.")
-        print(" -stats : Show your statistics.")
-        print(" -allin : Exactly what you think, going all in!")
+        print(" -help   : Show available controls and their descriptions.")
+        print(" -quit   : Quit the game.")
+        print(" -stats  : Show your statistics.")
+        print(" -dealer : To ask the dealer for higher max bets.")
+        print(" -allin  : Exactly what you think, going all in!")
 
     def quit(self):
             sys.exit()  # Quit the application
