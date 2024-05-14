@@ -110,11 +110,11 @@ class JsonFileManager:
         self.save_data("dealer_lv.json", self.dealer_lv)
 
     def update_dealer_lv_up(self, lv):
-        self.dealer_lv =+ lv
+        self.dealer_lv =+ 1
         self.save_dealer_lv()
 
     def update_dealer_lv_down(self, lv):
-        self.dealer_lv =- lv
+        self.dealer_lv =- 1
         self.save_dealer_lv()
 
     def print_maximum_bets(self, dealer_lv):
@@ -128,15 +128,16 @@ class JsonFileManager:
             print(f"Your maximum bets are \033[32m10000\033[0m. \n")
 
     # define the max bet
-    def load_max_bet(load_dealer_lv):
-        if load_dealer_lv() is 0:
-            max_bet = 100
-        elif load_dealer_lv() is 1:
-            max_bet = 1000
-        elif load_dealer_lv() is 2:
-            max_bet = 5000
-        elif load_dealer_lv() is 3:
-            max_bet = 10000
+    def load_max_bet(self):
+        dealer_lv = self.load_dealer_lv()
+        if dealer_lv == 0:
+            return 100
+        elif dealer_lv == 1:
+            return 1000
+        elif dealer_lv == 2:
+            return 5000
+        elif dealer_lv == 3:
+            return 10000
         
 
 # Initialize the JsonFileManager instance
