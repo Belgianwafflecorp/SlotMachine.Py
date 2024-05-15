@@ -97,9 +97,11 @@ class JsonFileManager:
 
     def print_broke_counter(self, broke_counter):
         if broke_counter != 0:
+            if broke_counter == 1:
+                print(f"You've gone broke \033[31m{broke_counter}\033[0m time. \n")
             print(f"You've gone broke \033[31m{broke_counter}\033[0m times. \n")
         else:
-             print("Do you know you never went broke with us? \n")
+             print("Do you know you \033[31mnever\033[0m went broke with us? \n")
 
 
 # DEALER

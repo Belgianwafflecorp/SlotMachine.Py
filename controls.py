@@ -3,10 +3,13 @@ import JsonFileManager as json_fm
 
 
 class PlayerControls:
-    def __init__(self, balance, json_fm_instance: json_fm.JsonFileManager, spin_counter):
+    def __init__(self, balance, json_fm_instance: json_fm.JsonFileManager, spin_counter, print_max_bets, print_multiplier_count, print_broke_counter):
         self.balance = balance
         self.json_fm_instance = json_fm_instance
         self.spin_counter = spin_counter
+        self.print_max_bets = print_max_bets
+        self.print_multiplier_count = print_multiplier_count
+        self.print_broke_counter = print_broke_counter
         
 
     def print_help(self):
@@ -48,20 +51,23 @@ class PlayerControls:
         else:
             print("\nYou've reached the maximum dealer level. \n")
             
-
         
 
     def quit(self, balance, spin_counter, start_spin_count):
         session_spins = spin_counter - start_spin_count
         print(f"\nYou made \033[34m{session_spins}\033[0m spins this session.")
         #check_session_spins(session_spins) # personal message
-        print(f"You checked out with \033[32m${balance}\033[0m. Thanks for playing!\n")
+        print(f"You checked out with \033[32m${balance}\033[0m. Don't forget to come back!\n")
         self.json_fm_instance.save_balance(balance)
         sys.exit() 
 
     def print_stats(self):
-        print("Player statistics:")
+        print("\n Player statistics: \n")
         print(f"Balance: ${self.balance}")
+        print(f"Total spins: {self.spin_counter}")
+        self.json_fm_instance.print.maximum_bets(self.json_fm_instance.load_dealer_lv())
+        self.json_fm_instance.print_multiplier_count(self.json_fm_instance.load_multiplier_count())
+        self.json_fm_instance.print_broke_counter(self.json_fm_instance.load_broke_counter())
         
 
     def allin(self):
