@@ -11,7 +11,7 @@ JSON_DIR = "PLAYER_DATA"
 # Create an instance of JsonFileManager
 json_fm_instance = json_fm.JsonFileManager(JSON_DIR)
 # Create an instance of PlayerControls
-player_controls = PlayerControls(json_fm_instance.load_balance(), json_fm_instance.load_spin_count(), json_fm_instance)
+player_controls = PlayerControls(json_fm_instance.load_balance(), json_fm_instance.load_spin_count(), json_fm_instance.print_max_bets, json_fm_instance.print_multiplier_count, json_fm_instance.print_broke_counter)
 
 MAX_LINES = 3
 MIN_BET = 1
@@ -396,7 +396,23 @@ def spin(balance):
 
     return apply_multipliers(winnings) - bet
 
+def allin_spin(balance):
+    json_fm_instance.update_spin_count()
+    lines = get_number_of_lines()
+    bet = balance
+    slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
+    winnings, winning_lines = check_winnings(slots, lines, bet, symbol_values)
 
+    print_slot_machine(slots)
+    print(slot_machine_part_2)  
+    slot_machine_part_3(winnings)
+    print(slot_machine_part_4)
+    print()
+    
+    if winning_lines and winnings > 0:
+        print(f"You won \033[33m${winnings}\033[0m")
+
+    return apply_multipliers(winnings) - bet
 
 
 def broke(balance):
@@ -448,6 +464,11 @@ def main():
             player_controls.control_check(answer ,start_spin_count)
             if answer == "":
                 break
+            elif answer.lower() == "-allin":    #asking user if they want to go all in
+                player_controls.allin(balance)
+                if allin_spin(balance) == True:
+                    allin_spin(balance)     # going all in
+                    break
             else:
                 continue
 

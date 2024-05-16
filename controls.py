@@ -1,5 +1,6 @@
 import sys
 import JsonFileManager as json_fm  
+import time
 
 
 class PlayerControls:
@@ -71,8 +72,20 @@ class PlayerControls:
         
 
     def allin(self):
-        print("Betting all your balance!")
-        return self.balance
+        input("Are you sure you want to go all in? (yes/no) ")
+        if input() == "yes":
+            print("Let's get the manager here to monitor your spin. \n")
+            print_dots(3)
+            print(f"\nYou will bet {self.balance}. May luck be on your side.\n")
+            return True
+        else: 
+            print("Every shot you don't take is a guarantee miss.\n")
+            return False
 
+def print_dots(num_dots, delay=1):
+    for _ in range(num_dots):
+        print(".", end="", flush=True)  # Print a dot without newline and flush the output
+        time.sleep(delay)  # Wait for the specified delay before printing the next dot
+    print()  # Print a newline after all dots are printed
 
 
