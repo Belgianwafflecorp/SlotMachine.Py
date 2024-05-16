@@ -436,18 +436,16 @@ def main():
     broke_counter = json_fm_instance.load_broke_counter()
     dealer_lv = json_fm_instance.load_dealer_lv()
 
+    #print stats
     print(f"Total spins: \033[34m{start_spin_count}\033[0m")
     check_spin_counter(start_spin_count)
     json_fm_instance.print_highscore(highscore)
-
-    spin_counter = start_spin_count  # Set the current spin count to the start spin count
-
     json_fm_instance.print_multiplier_count(multiplier_count)
-
     json_fm_instance.print_maximum_bets(dealer_lv)
-
     json_fm_instance.print_broke_counter(broke_counter)
     
+    spin_counter = start_spin_count  # Set the current spin count to the start spin count
+
     if balance is None or balance == 0:
         print("No balance found or balance is zero.")
         balance = deposit()
@@ -471,20 +469,6 @@ def main():
                     break
             else:
                 continue
-
-        # if answer.lower() == "q":
-        #     session_spins = spin_counter - start_spin_count
-        #     print(f"\nYou made \033[34m{session_spins}\033[0m spins this session.")
-        #     check_session_spins(session_spins)
-        #     print(f"You checked out with \033[32m${balance}\033[0m. Thanks for playing!\n")
-        #     json_fm_instance.save_balance(balance)
-        #     player_controls.quit()
-        # else:    
-        #     balance += spin(balance)
-        #     if balance > highscore:
-        #         highscore = balance
-        #         json_fm_instance.save_highscore(highscore)
-        #     spin_counter += 1  # Increment spin count
 
         balance += spin(balance)
         if balance > highscore:
