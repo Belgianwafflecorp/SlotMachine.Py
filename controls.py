@@ -4,11 +4,11 @@ import time
 
 
 class PlayerControls:
-    def __init__(self, balance, json_fm_instance: json_fm.JsonFileManager, spin_counter, print_max_bets, print_multiplier_count, print_broke_counter):
+    def __init__(self, balance, json_fm_instance: json_fm.JsonFileManager, spin_counter, print_maximum_bets, print_multiplier_count, print_broke_counter):
         self.balance = balance
         self.json_fm_instance = json_fm_instance
         self.spin_counter = spin_counter
-        self.print_max_bets = print_max_bets
+        self.print_maximum_bets = print_maximum_bets
         self.print_multiplier_count = print_multiplier_count
         self.print_broke_counter = print_broke_counter
         
@@ -58,7 +58,6 @@ class PlayerControls:
         print(f"\nYou made \033[34m{session_spins}\033[0m spins this session.")
         #check_session_spins(session_spins) # personal message
         print(f"You checked out with \033[32m${balance}\033[0m. Don't forget to come back!\n")
-        self.json_fm_instance.save_balance(balance)
         sys.exit() 
 
     def print_stats(self):
