@@ -21,11 +21,11 @@ class PlayerControls:
         print(" -dealer : To ask the dealer for higher max bets.")
         print(" -allin  : Exactly what you think, going all in!\n")
 
-    def control_check(self, user_input, start_spin_count):
+    def control_check(self, user_input, session_spins):
         if user_input == "-help": 
             self.print_help()
         elif user_input == "-quit": 
-            self.quit(start_spin_count, self.spin_counter, self.balance)
+            self.quit(session_spins, self.balance)
         elif user_input == "-stats":
             self.print_stats()
         elif user_input == "-dealer":
@@ -54,8 +54,7 @@ class PlayerControls:
             
         
 
-    def quit(self, balance, spin_counter, start_spin_count):
-        session_spins = spin_counter - start_spin_count
+    def quit(self, balance, session_spins):
         print(f"\nYou made \033[34m{session_spins}\033[0m spins this session.")
         #check_session_spins(session_spins) # personal message
         print(f"You checked out with \033[32m${balance}\033[0m. Don't forget to come back!\n")

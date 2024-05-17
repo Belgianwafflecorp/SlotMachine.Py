@@ -67,6 +67,9 @@ class JsonFileManager:
         self.spin_counter += 1
         self.save_spin_count()
 
+    def print_spin_count(self, spin_counter):
+        print(f"You've made \033[34m{spin_counter}\033[0m spins. \n")
+
 
 # MULTIPLIER COUNT
     def load_multiplier_count(self):
@@ -98,8 +101,8 @@ class JsonFileManager:
     def print_broke_counter(self, broke_counter):
         if broke_counter != 0:
             if broke_counter == 1:
-                print(f"You've gone broke \033[31m{broke_counter}\033[0m time. \n")
-            print(f"You've gone broke \033[31m{broke_counter}\033[0m times. \n")
+                print(f"You've only gone broke \033[31m{broke_counter}\033[0m time. \n")
+            else: print(f"You've gone broke \033[31m{broke_counter}\033[0m times. \n")
         else:
              print("Do you know you \033[31mnever\033[0m went broke with us? \n")
 

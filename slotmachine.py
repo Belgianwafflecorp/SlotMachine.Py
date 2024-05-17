@@ -11,7 +11,7 @@ JSON_DIR = "PLAYER_DATA"
 # Create an instance of JsonFileManager
 json_fm_instance = json_fm.JsonFileManager(JSON_DIR)
 # Create an instance of PlayerControls
-player_controls = PlayerControls(json_fm_instance.load_balance(), json_fm_instance.load_spin_count(), json_fm_instance.print_max_bets, json_fm_instance.print_multiplier_count, json_fm_instance.print_broke_counter)
+player_controls = PlayerControls(json_fm_instance.load_balance(), json_fm_instance, json_fm_instance.load_spin_count(), json_fm_instance.print_maximum_bets, json_fm_instance.print_multiplier_count, json_fm_instance.print_broke_counter)
 
 MAX_LINES = 3
 MIN_BET = 1
@@ -375,7 +375,9 @@ def check_session_spins(session_spins):
     elif session_spins < 100:
         print("\033[36mNot even 100 spins. You can do better!\033[0m \n")
 
-def spin(balance):
+def spin(balance, session_spins, spin_count):
+    spin_count += 1  # Increment spin count
+    session_spins += 1
     json_fm_instance.update_spin_count()
     lines = get_number_of_lines()
     bet = validate_bet(balance)
@@ -393,10 +395,13 @@ def spin(balance):
     
     if winning_lines and winnings > 0:
         print(f"You won \033[33m${winnings}\033[0m")
-
+    json_fm_instance.save_balance(balance)
     return apply_multipliers(winnings) - bet
 
-def allin_spin(balance):
+
+def allin_spin(balance, session_spins, spin_count):
+    spin_count += 1  # Increment spin count
+    session_spins += 1
     json_fm_instance.update_spin_count()
     lines = get_number_of_lines()
     bet = balance
@@ -429,22 +434,21 @@ def main():
     print("\nWelcome to the slot machine!\n")
     
     # Load PLAYER_DATA
-    start_spin_count = json_fm_instance.load_spin_count()
+    spin_count = json_fm_instance.load_spin_count()
     balance = json_fm_instance.load_balance()
     highscore = json_fm_instance.load_highscore()
     multiplier_count = json_fm_instance.load_multiplier_count()
     broke_counter = json_fm_instance.load_broke_counter()
     dealer_lv = json_fm_instance.load_dealer_lv()
-
+    session_spins = 0
+    
     #print stats
-    print(f"Total spins: \033[34m{start_spin_count}\033[0m")
-    check_spin_counter(start_spin_count)
     json_fm_instance.print_highscore(highscore)
+    json_fm_instance.print_spin_count(spin_count)
     json_fm_instance.print_multiplier_count(multiplier_count)
     json_fm_instance.print_maximum_bets(dealer_lv)
     json_fm_instance.print_broke_counter(broke_counter)
     
-    spin_counter = start_spin_count  # Set the current spin count to the start spin count
 
     if balance is None or balance == 0:
         print("No balance found or balance is zero.")
@@ -459,7 +463,7 @@ def main():
         
         while True:
             answer = input("Press enter to play ( or type -help for more commands): ")
-            player_controls.control_check(answer ,start_spin_count)
+            player_controls.control_check(answer ,session_spins)
             if answer == "":
                 break
             elif answer.lower() == "-allin":    #asking user if they want to go all in
@@ -470,17 +474,18 @@ def main():
             else:
                 continue
 
-        balance += spin(balance)
+        balance += spin(balance, session_spins, spin_count)
         if balance > highscore:
              highscore = balance
              json_fm_instance.save_highscore(highscore)
-        spin_counter += 1  # Increment spin count
+        
     
     # Save Json files
-    json_fm_instance.save_spin_count(spin_counter)
+    json_fm_instance.save_spin_count(spin_count)
     json_fm_instance.save_balance(balance)
     json_fm_instance.save_highscore(highscore)
     json_fm_instance.save_broke_counter(broke_counter)
+    
 
 if __name__ == "__main__":
     main()
