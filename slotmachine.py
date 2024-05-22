@@ -54,6 +54,7 @@ quotes_win = [
     "Jackpot dreams and spinning reels.",
     "The sound of spinning reels, music to the ears.",
     "Dare to dream big, spin to win big.",
+    "A true winner never stops spinning.",
 ]
 
 quotes_loss = [
@@ -75,6 +76,7 @@ quotes_loss = [
     "The greatest glory is not in never falling, but in rising every time we fall.",
     "Failure is not the opposite of success; it's part of the journey.",
     "Your past does not determine your future; keep spinning towards your goals.",
+    "A true winner never stops spinning.",
 ]
 
 
