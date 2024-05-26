@@ -35,7 +35,7 @@ class SlotMachine:
         self.max_bet = MAX_BET
 
     def load_player(self):
-        self.balance = 1000 #self.json_fm.load_balance()
+        self.balance = self.json_fm.load_balance()
         self.highscore = self.json_fm.load_highscore()
         self.spin_counter = self.json_fm.load_spin_count()
         self.multiplier_counter = self.json_fm.load_multiplier_count()
