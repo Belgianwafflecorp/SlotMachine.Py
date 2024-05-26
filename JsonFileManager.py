@@ -5,17 +5,17 @@ import json
 JSON_DIR = "PLAYER_DATA"
 
 # Ensure that the directory exists
-os.makedirs(JSON_DIR, exist_ok=True)
 
 class JsonFileManager:
     def __init__(self, directory):
         self.directory = directory
+        os.makedirs(JSON_DIR, exist_ok=True)
+
         self.balance_file = os.path.join(directory, "balance.json")
         self.highscore_file = os.path.join(directory, "highscore.json")
         self.spin_count_file = os.path.join(directory, "spin_count.json")
         self.multiplier_count_file = os.path.join(directory, "multiplier_count.json")
-        self.spin_counter = self.load_spin_count()
-        self.multiplier_counter = self.load_multiplier_count()
+        self.broke_counter_file = os.path.join(directory, "broke_counter.json")
 
 # SAVE DATA
     def save_data(self, filename, data):
@@ -60,8 +60,8 @@ class JsonFileManager:
     def load_spin_count(self):
         return self.load_data("spin_count.json") or 0
 
-    def save_spin_count(self):
-        self.save_data("spin_count.json", self.spin_counter)
+    def save_spin_count(self, spin_counter):
+        self.save_data("spin_count.json", spin_counter)
 
     def update_spin_count(self):
         self.spin_counter += 1
@@ -72,15 +72,15 @@ class JsonFileManager:
     def load_multiplier_count(self):
         return self.load_data("multiplier_count.json") or 0
 
-    def save_multiplier_count(self):
-        self.save_data("multiplier_count.json", self.multiplier_counter)
+    def save_multiplier_count(self, multiplier_counter):
+        self.save_data("multiplier_count.json", multiplier_counter)
 
     def update_multiplier_count(self):
         self.multiplier_counter += 1
         self.save_multiplier_count()
 
-    def print_multiplier_count(self, multiplier_count):
-        print("You've used the multiplier " + "\033[32m" + str(multiplier_count) + "\033[0m" + " times. \n")
+    # def print_multiplier_count(self, multiplier_count):
+    #     print("You've used the multiplier " + "\033[32m" + str(multiplier_count) + "\033[0m" + " times. \n")
 
 
 # BROKE COUNTER
@@ -95,12 +95,8 @@ class JsonFileManager:
         broke_counter += 1
         self.save_broke_counter(broke_counter)
 
-    def print_broke_counter(self, broke_counter):
-        if broke_counter != 0:
-            print("You've gone broke " + "\033[31m" + str(broke_counter) + "\033[0m" + " times. \n")
-        else:
-             print("Do you know you never went broke with us? \n")
-
-
-# Initialize the JsonFileManager instance
-jsonFileManager = JsonFileManager(JSON_DIR)
+    # def print_broke_counter(self, broke_counter):
+    #     if broke_counter != 0:
+    #         print("You've gone broke " + "\033[31m" + str(broke_counter) + "\033[0m" + " times. \n")
+    #     else:
+    #          print("Do you know you never went broke with us? \n")
