@@ -27,50 +27,6 @@ player_controls = PlayerControls(
     json_fm_instance.load_spin_count(),
 )
 # Define a list of quotes
-<<<<<<< HEAD
-quotes_win = [
-    "You are on a roll! Keep going!",
-    "You are so close to the jackpot, keep going!",
-    "You are doing great! Keep going!",
-    "You are on a winning streak! Keep going!",
-    "You are on fire! Keep going!",
-    "You are so lucky! Keep going!",
-    "You are doing amazing! Keep going!",
-    "With the multiplier, you could win even more!",
-    "There is a chance to dubble your winnings!",
-    "Up to 1000x your winnings with the multiplier!",
-    "I know you would love to double that number!",
-    "Spin to win!",
-    "Roll the reels!",
-    "Jackpot dreams and spinning reels.",
-    "The sound of spinning reels, music to the ears.",
-    "Dare to dream big, spin to win big.",
-    "A true winner never stops spinning.",
-]
-
-quotes_loss = [
-    "I know you are thinking about quitting, but don't you want to double that number tho?",
-    "Only a small setback, focus on the next spin!",
-    "Every gambler quits just before they win big, don't be that guy!",
-    "Can't stop on a loss, the next one is yours!",
-    "The next one is yours, I can feel it!",
-    "Don't stop now, the next one is a winner!",
-    "Spin to win!",
-    "Roll the reels!",
-    "Winning streak ahead?",
-    "Dare to dream big, spin to win big.",
-    "A winning combination is just a spin away.",
-    "Every setback is a setup for a comeback!",
-    "Don't let a loss dim your winning spirit.",
-    "It's not about how hard you fall, but how high you bounce back.",
-    "Embrace setbacks as stepping stones to success.",
-    "The greatest glory is not in never falling, but in rising every time we fall.",
-    "Failure is not the opposite of success; it's part of the journey.",
-    "Your past does not determine your future; keep spinning towards your goals.",
-    "A true winner never stops spinning.",
-]
-=======
->>>>>>> dev
 
 
 def check_winnings(columns, lines, bet, values):
