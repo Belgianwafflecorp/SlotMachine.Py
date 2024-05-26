@@ -137,10 +137,13 @@ class SlotMachine:
                 bet = None
                 print("Bet must be a number")
                 continue
-            if bet < self.min_bet or bet > self.max_bet:
-                bet = None
-                print(f"Bet must be {MIN_BET}-{MAX_BET}")
-
+            if MIN_BET <= bet <= MAX_BET:
+                break
+            elif bet >= MAX_BET:
+                bet = MAX_BET
+                break
+            else:
+                print(f"Please enter a bet between ${MIN_BET} and ${MAX_BET}.")
         return bet
 
     def spin(self):

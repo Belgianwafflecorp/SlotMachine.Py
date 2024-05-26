@@ -209,7 +209,7 @@ def get_bet():
         bet = int(bet)
         if MIN_BET <= bet <= MAX_BET:
             break
-        elif bet > MAX_BET:
+        elif bet >= MAX_BET:
             bet = MAX_BET
             break
         else:
