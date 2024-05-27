@@ -8,7 +8,7 @@ quotes_win = [
     "You are doing amazing! Keep going!",
     "With the multiplier, you could win even more!",
     "There is a chance to dubble your winnings!",
-    "Up to 1000x your winnings with the multiplier!",
+    "Up to [white]1000x[/white] your winnings with the multiplier!",
     "I know you would love to double that number!",
     "Spin to win!",
     "Roll the reels!",
