@@ -1,3 +1,4 @@
+import os
 import random
 import JsonFileManager as json_fm
 from controls import PlayerControls
@@ -167,9 +168,19 @@ class SlotMachine:
                 print(f"Please enter a bet between ${MIN_BET} and ${MAX_BET}.")
         return bet
 
+    def clear_screen(self):
+    # For Windows
+         if os.name == 'nt':
+             os.system('cls')
+         # For Mac and Linux (os.name is 'posix')
+         else:
+              os.system('clear')
+
     def spin(self):
         s.player_broke()
         bet = self.get_bet()
+        # clear the screen
+        self.clear_screen()
         self.sessie_spins += 1
         if bet > self.balance:
             print("You don't have enough balance")
@@ -198,6 +209,7 @@ class SlotMachine:
         self.update_spin_counter()
         self.update_highscore()
         self.save_player()
+    
 
     def use_multiplier(self):
         # get the multiplier
