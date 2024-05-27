@@ -179,8 +179,7 @@ class SlotMachine:
     def spin(self):
         s.player_broke()
         bet = self.get_bet()
-        # clear the screen
-        self.clear_screen()
+        self.clear_screen() # clear the screen (nicer experience for the player)
         self.sessie_spins += 1
         if bet > self.balance:
             print("You don't have enough balance")
@@ -215,11 +214,11 @@ class SlotMachine:
         # get the multiplier
         multiplier = self.get_multiplier()
         # multiply the winnings
-        print(f"Your winnings are multiplied by {multiplier}")
 
         self.winnings *= multiplier
         self.winnings = int(self.winnings)
-        print(f"Your new winnings are: {self.winnings}")
+        self.print_multiplier_message(multiplier)
+        print(f"Your winnings are now: {self.winnings}")
 
     def get_multiplier(self):
         # get the multiplier
@@ -227,6 +226,20 @@ class SlotMachine:
             list(probabilities.keys()), weights=probabilities.values(), k=1
         )[0]
         return multiplier
+    
+    def print_multiplier_message(self, multiplier):
+        if multiplier == 100:
+            print("[bold magenta]You hit the jackpot! Your winnings are multiplied by 100![/bold magenta]")
+        elif multiplier == 10:
+            print("[bold magenta]You got a massive win! Your winnings are multiplied by 10![/bold magenta]")
+        elif multiplier == 2:
+            print("[bold magenta]You doubled your winnings with the multiplier![/bold magenta]")
+        elif multiplier == 1.5:
+            print("[bold magenta]You increased your winnings by 50% with the multiplier![/bold magenta]")
+        elif multiplier > 1:
+            print("[bold magenta]Profits on top of profits![/bold magenta]")
+        else:
+            print("[bold magenta]Better luck next time![/bold magenta]")
 
     def get_winnings(self, bet):
         wlines = self.get_wining_lines()
