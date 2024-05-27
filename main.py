@@ -65,7 +65,28 @@ class SlotMachine:
         self.save_player()
 
     def player_broke(self):
-        return self.balance == 0
+        if self.balance < 1:
+            self.update_broke_counter()
+            print("Your out of chips, make a new deposit to continue playing")
+            s.deposit()
+        
+    def deposit(self):
+        while True:
+            amount = input("Enter the amount you want to deposit: $")
+            if amount.isdigit():
+             amount = int(amount)
+             if amount == 1069:
+                 print("\nCheeky basterd. I'll let that one slide.\n")
+             elif amount > 1000 and amount != 1069:
+                 print("Don't get over your head. You get $1000 to start with.")
+                 amount = 1000
+             elif amount <= 0:
+                 print("Please enter a positive amount.")
+             break
+            else:
+             print("Please enter a valid amount.")
+             return amount
+        self.balance += amount
 
     def slot_machine_part_2(self):
         # display the row of self.slots vertically so row 1 is column 1
@@ -137,13 +158,17 @@ class SlotMachine:
                 bet = None
                 print("Bet must be a number")
                 continue
-            if bet < self.min_bet or bet > self.max_bet:
-                bet = None
-                print(f"Bet must be {MIN_BET}-{MAX_BET}")
-
+            if MIN_BET <= bet <= MAX_BET:
+                break
+            elif bet >= MAX_BET:
+                bet = MAX_BET
+                break
+            else:
+                print(f"Please enter a bet between ${MIN_BET} and ${MAX_BET}.")
         return bet
 
     def spin(self):
+        s.player_broke()
         bet = self.get_bet()
         self.sessie_spins += 1
         if bet > self.balance:
