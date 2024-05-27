@@ -120,7 +120,7 @@ class SlotMachine:
         remaining = 15 - spaces_needed - winning_len
 
         if self.winnings > 0:
-            s += f"[green]{self.winnings}[/green]"
+            s += f"[bold yellow]{self.winnings}[/bold yellow]"
         else:
             s += f"[red]{self.winnings}[/red]"
 
