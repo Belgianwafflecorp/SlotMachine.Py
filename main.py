@@ -18,7 +18,7 @@ from settings import (
     probabilities,
 )
 from rich import print
-
+from rich.table import Table
 
 class SlotMachine:
     def __init__(self) -> None:
@@ -70,7 +70,7 @@ class SlotMachine:
             self.update_broke_counter()
             print("Your out of chips, make a new deposit to continue playing")
             s.deposit()
-        
+
     def deposit(self):
         while True:
             amount = input("Enter the amount you want to deposit: $")
@@ -282,6 +282,31 @@ class SlotMachine:
         lines.append([self.slots[i][self.rows - i - 1] for i in range(self.rows)])
         return lines
 
+    def print_stats(self):
+        table = Table(title="Slot Machine Stats")
+
+        # Add columns with the appropriate styles
+        table.add_column("Statistic", justify="left", style="yellow", no_wrap=True)
+        table.add_column("Value", justify="right", style="blue")
+
+        # Add rows with the statistics and values
+        table.add_row("Total spins", f"[blue]{self.spin_counter}[/blue]")
+        table.add_row("Total multiplier uses", f"[blue]{self.multiplier_counter}[/blue]")
+        table.add_row("Total times broke", f"[blue]{self.broke_counter}[/blue]")
+        table.add_row("Highscore", f"[blue]{self.highscore}[/blue]")
+        table.add_row("", "")  # Add an empty row for spacing
+        table.add_row("Your balance", f"[bold green]{self.balance}[/bold green]")
+
+        print(table)
+
+    def welcome(self):
+        print("\n   Welcome to the Slot Machine\n")
+        self.print_stats()
+        input("\n      Press enter to start")
+        self.clear_screen()
+
+# Main loop
+s = SlotMachine()
+s.welcome()
 while 1:
-    s = SlotMachine()
     s.spin()
