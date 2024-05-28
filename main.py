@@ -189,7 +189,7 @@ class SlotMachine:
 
     def spin_time(self):
         print("\n\n\n\n\n\n\t   [bold yellow]Spinning the wheels...[/bold yellow]")
-        time.sleep(1)
+        time.sleep(0.75)
         self.clear_screen()
         
 
