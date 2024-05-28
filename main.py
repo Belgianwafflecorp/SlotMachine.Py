@@ -21,6 +21,9 @@ from rich import print
 from rich.table import Table
 
 class SlotMachine:
+
+    __previous_bet = 1
+
     def __init__(self) -> None:
         self.json_fm = json_fm.JsonFileManager(JSON_DIR)
         self.load_player()
@@ -142,23 +145,29 @@ class SlotMachine:
     def get_min_max_bet(self):
         return self.min_bet, self.max_bet
 
-    def get_bet(self):
+    def get_bet(self, previous_bet):
         self.min_bet, self.max_bet = self.get_min_max_bet()
         bet = None
-        while not bet:
+        while bet is None:
             # show balance
             print(
                 f"Your balance is: {self.balance}. \n"
-                f"how much would you like to bet? between {self.min_bet} and {self.max_bet}:",
+                f"Press enter to bet:({previous_bet}) or\n"
+                f"Place a bet between {self.min_bet} and {self.max_bet}:",
                 end=" ",
             )
             bet = input()
+            if bet == "":
+                bet = previous_bet
+                break
+
             try:
                 bet = int(bet)
             except ValueError:
                 bet = None
                 print("Bet must be a number")
                 continue
+            
             if MIN_BET <= bet <= MAX_BET:
                 break
             elif bet >= MAX_BET:
@@ -178,7 +187,8 @@ class SlotMachine:
 
     def spin(self):
         s.player_broke()
-        bet = self.get_bet()
+        bet = self.get_bet(self.__previous_bet)
+        self.__previous_bet = bet
         self.clear_screen() # clear the screen (nicer experience for the player)
         self.sessie_spins += 1
         if bet > self.balance:
@@ -208,6 +218,7 @@ class SlotMachine:
         self.update_spin_counter()
         self.update_highscore()
         self.save_player()
+        return bet
     
 
     def use_multiplier(self):
