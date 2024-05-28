@@ -152,7 +152,8 @@ class SlotMachine:
             # show balance
             print(
                 f"Your balance is: {self.balance}. \n"
-                f"how much would you like to bet? between {self.min_bet} and {self.max_bet}:",
+                f"Press enter to bet:({previous_bet}) or\n"
+                f"Place a bet between {self.min_bet} and {self.max_bet}:",
                 end=" ",
             )
             bet = input()
