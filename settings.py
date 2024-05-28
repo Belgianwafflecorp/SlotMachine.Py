@@ -1,3 +1,6 @@
+import time
+from rich import print
+
 MAX_LINES = 3
 MAX_BET = 100
 MIN_BET = 1
@@ -61,3 +64,60 @@ probabilities = {
         0.9: 0.10,  # 10% chance to lose 10% of the winnings
         0.5: 0.04,  # 4% chance to lose 50% of the winnings
     }
+
+ascii_j = """
+   _ 
+  | | 
+\\_|_| 
+
+"""
+ascii_a = """
+    __ 
+  / /\\ 
+ /_/--\\ 
+
+"""
+ascii_c = """
+  __
+ / /`  
+ \\_\\_, 
+
+"""
+
+ascii_k = """
+ _   
+| |_/ 
+|_| \\ 
+
+"""
+
+ascii_p = """
+ ___ 
+| |_) 
+|_|
+
+"""
+
+ascii_o = """
+ ___ 
+/ / \\
+\\_\\_/ 
+
+"""
+ascii_t = """
+_____
+ | | 
+ |_|
+
+"""
+ascii_jackpot = [ascii_j, ascii_a, ascii_c, ascii_k, ascii_p, ascii_o, ascii_t]
+
+jackpot_full = """
+   _    __    __    _     ___   ___  _____
+  | |  / /\\  / /`  | |_/ | |_) / / \\  | | 
+\\_|_| /_/--\\ \\_\\_, |_| \\ |_|   \\_\\_/  |_| 
+"""
+
+def print_ascii_jackpot():
+    print(f"[bold magenta]{jackpot_full}[/bold magenta]")
+

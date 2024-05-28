@@ -37,3 +37,4 @@ quotes_loss = [
     "Failure is not the opposite of success; it's part of the journey.",
     "Your past does not determine your future; keep spinning towards your goals.",
 ]
+

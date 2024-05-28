@@ -17,6 +17,7 @@ from settings import (
     slot_machine_part_3,
     slot_machine_part_4,
     probabilities,
+    print_ascii_jackpot,
 )
 from rich import print
 from rich.table import Table
@@ -249,6 +250,7 @@ class SlotMachine:
     def print_multiplier_message(self, multiplier):
         if multiplier == 100:
             print("[bold magenta]You hit the jackpot! Your winnings are multiplied by 100![/bold magenta]")
+            print_ascii_jackpot()
         elif multiplier == 10:
             print("[bold magenta]You got a massive win! Your winnings are multiplied by 10![/bold magenta]")
         elif multiplier == 2:
