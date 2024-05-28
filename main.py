@@ -1,4 +1,5 @@
 import os
+import time
 import random
 import JsonFileManager as json_fm
 from controls import PlayerControls
@@ -185,6 +186,12 @@ class SlotMachine:
          else:
               os.system('clear')
 
+    def spin_time(self):
+        print("\n\n\n\n\n\n\t   [bold yellow]Spinning the wheels...[/bold yellow]")
+        time.sleep(1)
+        self.clear_screen()
+        
+
     def spin(self):
         s.player_broke()
         bet = self.get_bet(self.__previous_bet)
@@ -195,6 +202,7 @@ class SlotMachine:
             print("You don't have enough balance")
             return
         self.balance -= bet
+        self.spin_time()
         self.get_slot_machine_spin()
         self.get_winnings(bet)
         self.display_slot_machine()
