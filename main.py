@@ -70,7 +70,7 @@ class SlotMachine:
             self.update_broke_counter()
             print("Your out of chips, make a new deposit to continue playing")
             s.deposit()
-        
+
     def deposit(self):
         while True:
             amount = input("Enter the amount you want to deposit: $")
@@ -282,6 +282,16 @@ class SlotMachine:
         lines.append([self.slots[i][self.rows - i - 1] for i in range(self.rows)])
         return lines
 
+    def print_stats(self):
+        print(f"Total spins: {self.spin_counter}") 
+        print(f"Total multiplier uses: {self.multiplier_counter}")
+        print(f"Total times broke: {self.broke_counter}")
+        print(f"Highscore: {self.highscore}")
+        print()
+
+# Main loop
+s = SlotMachine()
+print("Welcome to the Slot Machine\n")
+s.print_stats()
 while 1:
-    s = SlotMachine()
     s.spin()
