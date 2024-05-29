@@ -17,6 +17,7 @@ class JsonFileManager:
         self.multiplier_count_file = os.path.join(directory, "multiplier_count.json")
         self.broke_counter_file = os.path.join(directory, "broke_counter.json")
         self.best_spin_file = os.path.join(directory, "best_spin.json")
+        self.jackpot_multiplier_counter_file = os.path.join(directory, "jackpot_multiplier_counter.json")
 
 # SAVE DATA
     def save_data(self, filename, data):
@@ -101,4 +102,13 @@ class JsonFileManager:
     def save_best_spin(self, best_spin):
         self.save_data("best_spin.json", best_spin)
 
-    
+# JACKPOT MULTIPLIER COUNTER
+    def load_jackpot_multiplier_counter(self):
+        return self.load_data("jackpot_multiplier_counter.json") or 0
+
+    def save_jackpot_multiplier_counter(self, jackpot_multiplier_counter):
+        self.save_data("jackpot_multiplier_counter.json", jackpot_multiplier_counter)
+
+    def update_jackpot_multiplier_counter(self):
+        self.jackpot_multiplier_counter += 1
+        self.save_jackpot_multiplier_counter()

@@ -47,6 +47,7 @@ class SlotMachine:
         self.multiplier_counter = self.json_fm.load_multiplier_count()
         self.broke_counter = self.json_fm.load_broke_counter()
         self.best_spin = self.json_fm.load_best_spin()
+        self.jackpot_multiplier_counter = self.json_fm.load_jackpot_multiplier_counter()
 
     def save_player(self):
         self.json_fm.save_balance(self.balance)
@@ -55,6 +56,7 @@ class SlotMachine:
         self.json_fm.save_multiplier_count(self.multiplier_counter)
         self.json_fm.save_broke_counter(self.broke_counter)
         self.json_fm.save_best_spin(self.best_spin)
+        self.json_fm.save_jackpot_multiplier_counter(self.jackpot_multiplier_counter)
 
     def update_multiplier_counter(self):
         self.multiplier_counter += 1
@@ -99,6 +101,10 @@ class SlotMachine:
     def update_best_spin(self):
         self.best_spin = max(self.best_spin, self.winnings)
         self.save_player()    
+
+    def update_jackpot_multiplier_counter(self):
+        self.jackpot_multiplier_counter += 1
+        self.save_player()
 
     def slot_machine_part_2(self):
         # display the row of self.slots vertically so row 1 is column 1
@@ -255,9 +261,12 @@ class SlotMachine:
         return multiplier
     
     def print_multiplier_message(self, multiplier):
-        if multiplier == 100:
-            print("[bold magenta]You hit the jackpot! Your winnings are multiplied by 100![/bold magenta]")
+        if multiplier == 1000:
+            print("[bold magenta]You hit the jackpot! Your winnings are multiplied by 1000![/bold magenta]")
             print_ascii_jackpot()
+            self.update_jackpot_multiplier_counter()
+        elif multiplier == 100:
+            print("[bold magenta]You got a huge win! Your winnings are multiplied by 100![/bold magenta]")
         elif multiplier == 10:
             print("[bold magenta]You got a massive win! Your winnings are multiplied by 10![/bold magenta]")
         elif multiplier == 2:
@@ -319,10 +328,11 @@ class SlotMachine:
 
         # Add rows with the statistics and values
         table.add_row("Total spins", f"[blue]{self.spin_counter}[/blue]")
+        table.add_row("Best spin", f"[blue]{self.best_spin}[/blue]")
         table.add_row("Total multiplier uses", f"[blue]{self.multiplier_counter}[/blue]")
+        table.add_row("Multiplier jackpots", f"[blue]{self.jackpot_multiplier_counter}[/blue]")
         table.add_row("Total times broke", f"[blue]{self.broke_counter}[/blue]")
         table.add_row("Highscore", f"[blue]{self.highscore}[/blue]")
-        table.add_row("Biggest winning spin", f"[blue]{self.best_spin}[/blue]")
         table.add_row("", "")  # Add an empty row for spacing
         table.add_row("Your balance", f"[bold green]{self.balance}[/bold green]")
 
