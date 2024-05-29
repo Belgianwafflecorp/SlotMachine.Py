@@ -16,6 +16,7 @@ class JsonFileManager:
         self.spin_count_file = os.path.join(directory, "spin_count.json")
         self.multiplier_count_file = os.path.join(directory, "multiplier_count.json")
         self.broke_counter_file = os.path.join(directory, "broke_counter.json")
+        self.best_spin_file = os.path.join(directory, "best_spin.json")
 
 # SAVE DATA
     def save_data(self, filename, data):
@@ -79,9 +80,6 @@ class JsonFileManager:
         self.multiplier_counter += 1
         self.save_multiplier_count()
 
-    # def print_multiplier_count(self, multiplier_count):
-    #     print("You've used the multiplier " + "\033[32m" + str(multiplier_count) + "\033[0m" + " times. \n")
-
 
 # BROKE COUNTER
     def load_broke_counter(self):
@@ -95,8 +93,12 @@ class JsonFileManager:
         broke_counter += 1
         self.save_broke_counter(broke_counter)
 
-    # def print_broke_counter(self, broke_counter):
-    #     if broke_counter != 0:
-    #         print("You've gone broke " + "\033[31m" + str(broke_counter) + "\033[0m" + " times. \n")
-    #     else:
-    #          print("Do you know you never went broke with us? \n")
+
+# BEST SPIN 
+    def load_best_spin(self):
+        return self.load_data("best_spin.json") or 0
+
+    def save_best_spin(self, best_spin):
+        self.save_data("best_spin.json", best_spin)
+
+    

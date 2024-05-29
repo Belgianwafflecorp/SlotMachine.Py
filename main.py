@@ -46,6 +46,7 @@ class SlotMachine:
         self.spin_counter = self.json_fm.load_spin_count()
         self.multiplier_counter = self.json_fm.load_multiplier_count()
         self.broke_counter = self.json_fm.load_broke_counter()
+        self.best_spin = self.json_fm.load_best_spin()
 
     def save_player(self):
         self.json_fm.save_balance(self.balance)
@@ -53,6 +54,7 @@ class SlotMachine:
         self.json_fm.save_spin_count(self.spin_counter)
         self.json_fm.save_multiplier_count(self.multiplier_counter)
         self.json_fm.save_broke_counter(self.broke_counter)
+        self.json_fm.save_best_spin(self.best_spin)
 
     def update_multiplier_counter(self):
         self.multiplier_counter += 1
@@ -93,6 +95,10 @@ class SlotMachine:
              print("Please enter a valid amount.")
              return amount
         self.balance += amount
+
+    def update_best_spin(self):
+        self.best_spin = max(self.best_spin, self.winnings)
+        self.save_player()    
 
     def slot_machine_part_2(self):
         # display the row of self.slots vertically so row 1 is column 1
@@ -207,7 +213,8 @@ class SlotMachine:
         self.get_slot_machine_spin()
         self.get_winnings(bet)
         self.display_slot_machine()
-
+        self.update_best_spin()
+        
         # ask if the player wants to use the multiplier
         if self.winnings > 0:
             print("Would you like to use the multiplier? (n to SKIP):", end=" ")
@@ -315,6 +322,7 @@ class SlotMachine:
         table.add_row("Total multiplier uses", f"[blue]{self.multiplier_counter}[/blue]")
         table.add_row("Total times broke", f"[blue]{self.broke_counter}[/blue]")
         table.add_row("Highscore", f"[blue]{self.highscore}[/blue]")
+        table.add_row("Biggest winning spin", f"[blue]{self.best_spin}[/blue]")
         table.add_row("", "")  # Add an empty row for spacing
         table.add_row("Your balance", f"[bold green]{self.balance}[/bold green]")
 
