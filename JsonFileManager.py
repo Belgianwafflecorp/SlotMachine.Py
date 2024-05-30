@@ -1,6 +1,5 @@
 import os
 import json
-import sqlite3
 
 # Define the directory for JSON files
 JSON_DIR = "PLAYER_DATA"
@@ -20,13 +19,13 @@ class JsonFileManager:
         self.best_spin_file = os.path.join(directory, "best_spin.json")
         self.jackpot_multiplier_counter_file = os.path.join(directory, "jackpot_multiplier_counter.json")
 
-# SAVE DATA
+        # SAVE DATA
     def save_data(self, filename, data):
         filepath = os.path.join(self.directory, filename)
         with open(filepath, "w") as f:
             json.dump(data, f)
 
-# LOAD DATA
+    # LOAD DATA
     def load_data(self, filename):
         filepath = os.path.join(self.directory, filename)
         if os.path.exists(filepath):
@@ -35,7 +34,7 @@ class JsonFileManager:
         else:
             return None
 
-# BALANCE
+    # BALANCE
     def load_balance(self):
         return self.load_data("balance.json") or 0
 
@@ -46,7 +45,7 @@ class JsonFileManager:
         print(f"Your balance is: \033[32m${balance}\033[0m \n")
 
 
-# HIGHSCORE
+    # HIGHSCORE
     def load_highscore(self):
         return self.load_data("highscore.json") or 0
 

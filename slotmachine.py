@@ -1,12 +1,12 @@
+import os
+import time
 import random
-import JsonFileManager as json_fm
-from controls import PlayerControls
+from JsonFileManager import JsonFileManager
 from quotes import quotes_win, quotes_loss
+from database import DataBase
 from settings import (
     ROWS,
     COLS,
-    MAX_LINES,
-    MAX_BET,
     MIN_BET,
     symbol_count,
     symbol_values,
@@ -15,390 +15,370 @@ from settings import (
     slot_machine_part_3,
     slot_machine_part_4,
     probabilities,
+    print_ascii_jackpot,
 )
+from rich import print
+from rich.table import Table
 
 
-# Create an instance of JsonFileManager
-json_fm_instance = json_fm.JsonFileManager(JSON_DIR)
-# Create an instance of PlayerControls
-player_controls = PlayerControls(
-    json_fm_instance.load_balance(),
-    json_fm_instance.load_spin_count(),
-    json_fm_instance.load_spin_count(),
-)
-# Define a list of quotes
+class SlotMachine:
+    def __init__(self) -> None:
+        self.json_fm = JsonFileManager(JSON_DIR)
+        self.db = DataBase()
+        # self.load_player()
+        # self.swap_data_old_to_new()
+        self.rows = ROWS
+        self.cols = COLS
+        self.sessie_spins = 0
+        self.symbol_count = symbol_count  # number of each symbol per slot machine
+        self.symbol_values = symbol_values  # value of each symbol
+        self.slot_machine_part_1 = slot_machine_part_1
+        self.slot_machine_part_3 = slot_machine_part_3
+        self.slot_machine_part_4 = slot_machine_part_4
+        self.min_bet = MIN_BET
+        self.load_database()
 
+    def load_player(self):  # old
+        self.balance = self.json_fm.load_balance()
+        self.highscore = self.json_fm.load_highscore()
+        self.spin_counter = self.json_fm.load_spin_count()
+        self.multiplier_counter = self.json_fm.load_multiplier_count()
+        self.broke_counter = self.json_fm.load_broke_counter()
+        self.best_spin = self.json_fm.load_best_spin()
+        self.jackpot_multiplier_counter = self.json_fm.load_jackpot_multiplier_counter()
 
-def check_winnings(columns, lines, bet, values):
-    winnings = 0
-    winning_lines = []
+    def load_database(self):
+        self.balance = self.db.get_column("balance")
+        self.highscore = self.db.get_column("highscore")
+        self.spin_counter = self.db.get_column("spin_count")
+        self.multiplier_counter = self.db.get_column("multiplier_count")
+        self.broke_counter = self.db.get_column("broke_counter")
+        self.best_spin = self.db.get_column("best_spin")
+        self.jackpot_multiplier_counter = self.db.get_column(
+            "jackpot_multiplier_counter"
+        )
+        self.previous_bet = self.db.get_column("previous_bet")
+        self.max_bet = self.db.get_column("max_bet")
 
-    # Check horizontal winning lines
-    for line in range(lines):
-        symbol = columns[0][line]
-        for column in columns:
-            symbol_to_check = column[line]
-            if symbol != symbol_to_check:
+    def save_database(self):
+        self.db.update_column("balance", self.balance)
+        self.db.update_column("highscore", self.highscore)
+        self.db.update_column("spin_count", self.spin_counter)
+        self.db.update_column("multiplier_count", self.multiplier_counter)
+        self.db.update_column("broke_counter", self.broke_counter)
+        self.db.update_column("best_spin", self.best_spin)
+        self.db.update_column(
+            "jackpot_multiplier_counter", self.jackpot_multiplier_counter
+        )
+        self.db.update_column("previous_bet", self.previous_bet)
+        self.db.update_column("max_bet", self.max_bet)
+
+    def swap_data_old_to_new(self):
+        self.db.update_column("balance", self.json_fm.load_balance())
+        self.db.update_column("highscore", self.json_fm.load_highscore())
+        self.db.update_column("spin_count", self.json_fm.load_spin_count())
+        self.db.update_column("multiplier_count", self.json_fm.load_multiplier_count())
+        self.db.update_column("broke_counter", self.json_fm.load_broke_counter())
+        self.db.update_column("best_spin", self.json_fm.load_best_spin())
+        self.db.update_column("jackpot_multiplier_counter", self.json_fm.load_jackpot_multiplier_counter())
+
+    def save_player(self):  # old
+        self.json_fm.save_balance(self.balance)
+        self.json_fm.save_highscore(self.highscore)
+        self.json_fm.save_spin_count(self.spin_counter)
+        self.json_fm.save_multiplier_count(self.multiplier_counter)
+        self.json_fm.save_broke_counter(self.broke_counter)
+        self.json_fm.save_best_spin(self.best_spin)
+        self.json_fm.save_jackpot_multiplier_counter(self.jackpot_multiplier_counter)
+
+    # def update_multiplier_counter(self):
+    #     self.multiplier_counter += 1
+    #     self.save_player()
+
+    # def update_broke_counter(self):
+    #     self.broke_counter += 1
+    #     self.save_player()
+
+    # def update_spin_counter(self):
+    #     self.spin_counter += 1
+    #     self.save_player()
+
+    def check_highscore(self):
+        self.highscore = max(self.highscore, self.balance)
+        self.save_player()
+
+    def check_player_broke(self):
+        if self.balance < 1:
+            self.db.increment_column("broke_counter")
+            print("Your out of chips, make a new deposit to continue playing")
+            self.deposit()
+
+    def deposit(self):
+        while True:
+            amount = input("Enter the amount you want to deposit: $")
+            if amount.isdigit():
+                amount = int(amount)
+                match amount:
+                    case 1069:
+                        print("\nCheeky basterd. I'll let that one slide.\n")
+                    case _ if amount > 1000:
+                        print("Don't get over your head. You get $1000 to start with.")
+                        amount = 1000
+                    case _ if amount <= 0:
+                        print("Please enter a positive amount.")
+                    case _:
+                        break
+            else:
+                print("Please enter a valid amount.")
+        self.balance += amount
+        self.save_database()
+
+    def check_best_spin(self):
+        self.best_spin = max(self.best_spin, self.winnings)
+        self.save_database()
+
+    def slot_machine_part_2(self):
+        # display the row of self.slots vertically so row 1 is column 1
+        # double
+        s = ""
+        for i in range(self.rows):
+            s += " " * 12 + "|" + " ║"
+            for j in range(self.cols):
+                s += (
+                    self.slots[j][i] + " ║"
+                    if j != self.cols - 1
+                    else self.slots[j][i] + " ║"
+                )
+
+            s += " |\n" if i != self.rows - 1 else " |"
+        return s
+
+        
+
+    def display_slot_machine(self):
+        print(self.slot_machine_part_1)
+        print(self.slot_machine_part_2())
+        print(self.slot_machine_part_3)
+        print(self.show_winnings())
+        print(self.slot_machine_part_4)
+
+    def show_winnings(self):
+        winning_len = len(str(self.winnings))
+        spaces_needed = 15 - winning_len - 2
+
+        s = " " * 12 + "|" + " " * spaces_needed
+
+        remaining = 15 - spaces_needed - winning_len
+
+        if self.winnings > 0:
+            s += f"[bold yellow]{self.winnings}[/bold yellow]"
+        else:
+            s += f"[red]{self.winnings}[/red]"
+
+        s += " " * remaining + "|--'"
+        return s
+
+    def get_slot_machine_spin(self):
+        self.slots = [
+            random.choices(
+                list(self.symbol_count.keys()),
+                k=self.rows,
+                weights=self.symbol_count.values(),
+            )
+            for _ in range(self.cols)
+        ]
+
+    def display_balance(self):
+        print(
+            f"Enter a command (-help)\n"
+            f"Press enter to bet ({self.previous_bet})\n"
+            f"Place a bet between {self.min_bet} and {self.db.get_column("max_bet")}:",
+            end=" ",
+            )
+        
+
+    def get_bet(self):
+        bet = None
+        while bet is None:
+            # show balance
+            self.display_balance()
+            bet = input()
+            if bet.isdigit():
+                bet = int(bet)
+                if bet < self.min_bet or bet > self.db.get_column("max_bet"):
+                    print(f"Please enter a bet between ${self.min_bet} and ${self.db.get_column('max_bet')}.")
+                    bet = None
+                    continue
                 break
-        else:
-            winnings += values[symbol] * bet
-            winning_lines.append(line + 1)
-
-    # Check vertical winning lines
-    for column in columns:
-        symbol = column[0]
-        for symbol_to_check in column:
-            if symbol != symbol_to_check:
+            elif bet == "":
+                bet = self.previous_bet
                 break
-        else:
-            winnings += values[symbol] * bet
-            if winning_lines:
-                winning_lines.append(winning_lines[-1] + 1)
             else:
-                winning_lines.append(1)
+                print("Please enter a valid number.")
+                bet = None
+                continue
 
-    # Check diagonal winning lines
-    if columns[0][0] == columns[1][1] == columns[2][2]:
-        winnings += values[columns[0][0]] * bet
-        winning_lines.append(4)
-    if columns[0][2] == columns[1][1] == columns[2][0]:
-        winnings += values[columns[0][2]] * bet
-        winning_lines.append(5)
+        self.previous_bet = bet
+        self.db.update_column("previous_bet", bet)
+        return bet
 
-    return winnings, winning_lines
+    def clear_screen(self):
+        # For Windows
+        if os.name == "nt":
+            os.system("cls")
+        # For Mac and Linux (os.name is 'posix')
+        else:
+            os.system("clear")
 
+    def spin_time(self):
+        print("\n\n\n\n\n\n\t   [bold yellow]Spinning the wheels...[/bold yellow]")
+        time.sleep(0.75)
+        self.clear_screen()
 
-def multi_win(winnings, winning_lines):
+    def spin(self, bet=None):
+        self.check_player_broke()
+        if bet is None:
+            bet = self.get_bet()
+        elif bet < self.min_bet or bet > self.max_bet:
+            print(f"Please enter a bet between ${self.min_bet} and ${self.db.get_column("max_bet")}.")
+            return
+        else:
+            self.previous_bet = bet
+            self.db.update_column("previous_bet", bet)
+        self.clear_screen()  # clear the screen (nicer experience for the player)
+        if bet > self.balance:
+            print("You don't have enough balance")
+            return
+        self.sessie_spins += 1
+        self.balance -= bet
+        self.spin_time()
+        self.get_slot_machine_spin()
+        self.get_winnings(bet)
+        self.display_slot_machine()
+        self.check_best_spin()
 
-    # Increase the winnings by 20% for each extra winning line beyond the first.
-    if len(winning_lines) > 1:
-        extra_lines = len(winning_lines) - 1
-        extra_winnings = extra_lines * 0.2 * winnings
-        return int(winnings + extra_winnings)
-    else:
-        return int(winnings)
+        # ask if the player wants to use the multiplier
+        if self.winnings > 0:
+            print("Would you like to use the multiplier? (n to SKIP):", end=" ")
+            use_multiplier = input()
+            if use_multiplier.lower() != "n":
+                self.use_multiplier()
+                self.db.increment_column("multiplier_count")
 
-
-def random_multi_winnings(winnings):
-    # Randomly choose a multiplier based on the probabilities
-    multiplier = random.choices(
-        list(probabilities.keys()), list(probabilities.values())
-    )[0]
-
-    # Apply the multiplier to the winnings
-    return int(winnings * multiplier)
-
-
-def get_slot_machine_spin(rows, cols, symbols):
-    all_symbols = [
-        symbol for symbol, symbol_count in symbols.items() for _ in range(symbol_count)
-    ]
-    columns = [
-        random.sample(all_symbols, rows) for _ in range(cols)
-    ] 
-    return columns
-
-
-def slot_machine_part_3(winnings):
-    # Convert winnings to a string
-    winnings_str = str(winnings)
-    # Calculate the length of the winnings string
-    winnings_length = len(winnings_str)
-    # Calculate the number of spaces needed to fill the remaining length
-    spaces_needed = (
-        15 - winnings_length - 1
-    )  # Subtract 1 for the space between winnings and the padding
-    # If the winnings string is longer than 15 characters, truncate it
-    if winnings_length > 15:
-        winnings_str = winnings_str[:15]
-    # If the winnings string is shorter than 15 characters, pad it with spaces  
-    asci_winnings = f"{" " * 12}|{spaces_needed * ' '}\033[33m{winnings_str}\033[0m |--'"
-    print(asci_winnings)
-
-
-def print_slot_machine(columns):
-    print(slot_machine_part_1)
-    slots = get_slot_machine_spin(
-        ROWS, COLS, symbol_count
-    )  # Generate slot machine spin
-    check_winnings(
-        slots, MAX_LINES, MAX_BET, symbol_values
-    )  # Calculate winnings
-    for row in range(len(columns[0])):  # For each row in the first column
-        print(
-            " " * 12, end="|   "
-        )  # Print 12 spaces and "|" at the beginning of each row
-        for i, column in enumerate(columns):  # For each column in the columns list
-            if i != len(columns) - 1:  # If the column is not the last column
-                symbol = column[row]
-                
-                if symbol == "@":
-                    print(
-                        "\033[31m" + symbol + "\033[0m", end=" | "
-                    )  # Red color for symbol "@"
-                elif symbol == "£":
-                    print(
-                        "\033[32m" + symbol + "\033[0m", end=" | "
-                    )  # Green color for symbol "£"
-                elif symbol == "$":
-                    print(
-                        "\033[33m" + symbol + "\033[0m", end=" | "
-                    )  # Yellow color for symbol "$"
-                elif symbol == "€":
-                    print(
-                        "\033[34m" + symbol + "\033[0m", end=" | "
-                    )  # Blue color for symbol "€"
-                elif symbol == "§":
-                    print(
-                        "\033[35m" + symbol + "\033[0m", end=" | "
-                    )  # Magenta color for symbol "§"
             else:
-                symbol = column[row]
-                if symbol == "@":
-                    print(
-                        "\033[31m" + symbol + "\033[0m" + " ", end=" | "
-                    )  # Red color for symbol "@"
-                elif symbol == "£":
-                    print(
-                        "\033[32m" + symbol + "\033[0m" + " ", end=" | "
-                    )  # Green color for symbol "£"
-                elif symbol == "$":
-                    print(
-                        "\033[33m" + symbol + "\033[0m" + " ", end=" | "
-                    )  # Yellow color for symbol "$"
-                elif symbol == "€":
-                    print(
-                        "\033[34m" + symbol + "\033[0m" + " ", end=" | "
-                    )  # Blue color for symbol "€"
-                elif symbol == "§":
-                    print(
-                        "\033[35m" + symbol + "\033[0m" + " ", end=" | "
-                    )  # Magenta color for symbol "§"
-        print()  # Print a new line
-
-
-def deposit():
-    while True:
-        amount = input("Enter the amount you want to deposit: $")
-        if amount.isdigit():
-            amount = int(amount)
-            if amount == 1069:
-                print("\nCheeky basterd. I'll let that one slide.\n")
-            elif amount > 1000 and amount != 1069:
-                print("Don't get over your head. You get $1000 to start with.")
-                amount = 1000
-            elif amount <= 0:
-                print("Please enter a positive amount.")
-            break
+                print("You chose not to use the multiplier")
+        self.balance += self.winnings
+        if self.balance <= 0:
+            self.db.increment_column("broke_counter")
+            print(f"[bold yellow on white]{random.choice(quotes_loss)}[/bold yellow on white]")
+        elif self.winnings == 0:
+            print(f"[bold yellow]{random.choice(quotes_loss)}[/bold yellow]")
         else:
-            print("Please enter a valid amount.")
-    return amount
+            print(f"[bold yellow]{random.choice(quotes_win)}[/bold yellow]")
+        self.db.increment_column("spin_count")
+        self.check_highscore()
+        self.save_database()
+        return bet
 
+    def use_multiplier(self):
+        # get the multiplier
+        multiplier = self.get_multiplier()
+        # multiply the winnings
 
-def get_number_of_lines():
-    return MAX_LINES
+        self.winnings *= multiplier
+        self.winnings = int(self.winnings)
+        self.print_multiplier_message(multiplier)
+        print(f"Your winnings are now: {self.winnings}")
 
+    def get_multiplier(self):
+        # get the multiplier
+        multiplier = random.choices(
+            list(probabilities.keys()), weights=probabilities.values(), k=1
+        )[0]
+        return multiplier
 
-def get_bet():
-    while True:
-        bet = input(f"How much do you want to bet? (${MIN_BET} and ${MAX_BET})? $")
-        if not bet.isdigit():
-            print("Please enter a valid bet.")
-            continue # Skip the rest of the loop and start from the beginning
+    def print_multiplier_message(self, multiplier):
+        match multiplier:
+            case 1000:
+                print(
+                    "[bold magenta]You hit the jackpot! Your winnings are multiplied by 1000![/bold magenta]"
+                )
+                print_ascii_jackpot()
+                self.db.increment_column("jackpot_multiplier_counter")
+            case 100:
+                print(
+                    "[bold magenta]You got a huge win! Your winnings are multiplied by 100![/bold magenta]"
+                )
+            case 10:
+                print(
+                    "[bold magenta]You got a massive win! Your winnings are multiplied by 10![/bold magenta]"
+                )
+            case 2:
+                print(
+                    "[bold magenta]You doubled your winnings with the multiplier![/bold magenta]"
+                )
+            case 1.5:
+                print(
+                    "[bold magenta]You increased your winnings by 50% with the multiplier![/bold magenta]"
+                )
+            case _ if multiplier > 1:
+                print("[bold magenta]Profits on top of profits![/bold magenta]")
+            case _:
+                print(
+                    "[bold magenta]Better luck next time![/bold magenta]",
+                )
 
-        bet = int(bet)
-        if MIN_BET <= bet <= MAX_BET:
-            break
-        elif bet >= MAX_BET:
-            bet = MAX_BET
-            break
-        else:
-            print(f"Please enter a bet between ${MIN_BET} and ${MAX_BET}.")
-
-    return bet
-
-
-def validate_bet(balance):
-    while True:
-        bet = get_bet()
-        if bet > balance:
-            print(
-                f"You don't have enough money to make that bet. Your balance is ${balance}"
-            )
-        else:
-            return bet
-
-
-def print_multiplier_message(winnings, new_winnings):
-    if new_winnings > winnings:
-        print("\033[35mProfits on top of profits!\033[0m")
-        if new_winnings >= winnings * 100:
-            print(
-                "\033[35mYou hit the jackpot! Your winnings are multiplied by 100!\033[0m"
-            )
-        elif new_winnings >= winnings * 10:
-            print(
-                "\033[35mYou got a massive win! Your winnings are multiplied by 10!\033[0m"
-            )
-        elif new_winnings >= winnings * 2:
-            print("\033[35mYou doubled your winnings with the multiplier!\033[0m")
-        elif new_winnings >= winnings * 1.5:
-            print(
-                "\033[35mYou increased your winnings by 50% with the multiplier!\033[0m"
-            )
-        else:
-            print("\033[35mYou made some profit with the multiplier!\033[0m")
-
-
-def apply_multipliers(winnings):
-    if winnings > 0:
-        print("\033[36m" + random.choice(quotes_win) + "\033[0m")
-        choice = input(
-            "Do you want to use a random multiplier on your winnings? (N to skip): "
-        ).upper()
-        if choice != "N":
-            json_fm_instance.update_multiplier_count()
-            new_winnings = random_multi_winnings(winnings)
-            print_multiplier_message(winnings, new_winnings)
-            if new_winnings > 0:
-                print("Adjusted winnings: \033[33m$" + str(new_winnings) + "\033[0m")
-            else:
-                print("Adjusted winnings: \033[33m$" + str(new_winnings) + "\033[0m")
-        else:
-            new_winnings = winnings
-            print("\033[36m" + random.choice(quotes_loss) + "\033[0m")
-    else:
-        new_winnings = 0
-        print("\033[36m" + random.choice(quotes_loss) + "\033[0m")
-    return new_winnings
-
-
-def check_spin_counter():
-    if json_fm_instance.spin_counter > 1000000:
-        print("\033[36mA FOOKIN LEGEND, that's what you are!\033[0m\n")
-    elif json_fm_instance.spin_counter > 250000:
-        print("\033[36mHigh roller club member\033[0m\n")
-    elif json_fm_instance.spin_counter > 100000:
-        print("\033[36mOne of the VIP's\033[0m\n")
-    elif json_fm_instance.spin_counter > 50000:
-        print("\033[36mWe have a gambler here\033[0m\n")
-    elif json_fm_instance.spin_counter > 10000:
-        print("\033[36mWelcome back fren\033[0m\n")
-    elif json_fm_instance.spin_counter > 5000:
-        print("\033[36mWelcome back rookie\033[0m\n")
-    elif json_fm_instance.spin_counter > 1000:
-        print("\033[36mWelcome back newbie\033[0m\n")
-    else:
-        print("\033[36mStill new here i see\033[0m\n")
-
-
-def check_session_spins(session_spins):
-    if session_spins > 1000:
-        print(
-            "\033[36mYou've spun the reels over 1000 times! FOOKIN LEGEND!!!\033[0m \n"
+    def get_winnings(self, bet):
+        winnings = 0
+        # check each line if the symbols are the same
+        winnings = sum(
+            self.symbol_values[line[0]] * bet for line in self.get_wining_lines()
         )
-    elif session_spins > 500:
-        print(
-            "\033[36mYou've spun the reels over 500 times! Thats the spirit!\033[0m \n"
+        for _ in range(1, len(self.get_wining_lines())):
+            winnings *= 1.2
+
+        self.winnings = int(winnings)
+
+    def get_wining_lines(self):
+        return [
+            line
+            for line in self.get_lines()
+            if all(symbol == line[0] for symbol in line)
+        ]
+
+    def get_lines(self):
+        lines = (
+            [[self.slots[j][i] for j in range(self.cols)] for i in range(self.rows)]
+            + [[self.slots[j][i] for i in range(self.rows)] for j in range(self.cols)]
+            + [[self.slots[i][i] for i in range(self.rows)]]
+            + [[self.slots[i][self.rows - i - 1] for i in range(self.rows)]]
         )
-    elif session_spins > 100:
-        print(
-            "\033[36mYou've only spun the reels over 100 times. Thats below average!\033[0m \n"
+        return lines
+
+    def print_stats(self):
+        table = Table(title="Slot Machine Stats")
+        # Add columns with the appropriate styles
+        table.add_column("Statistic", justify="left", style="yellow", no_wrap=True)
+        table.add_column("Value", justify="right", style="blue")
+        # Add rows with the statistics and values
+        table.add_row("Total spins", f"[blue]{self.spin_counter}[/blue]")
+        table.add_row("Best spin", f"[blue]{self.best_spin}[/blue]")
+        table.add_row(
+            "Total multiplier uses", f"[blue]{self.multiplier_counter}[/blue]"
         )
-    elif session_spins < 100:
-        print("\033[36mNot even 100 spins. You can do better!\033[0m \n")
+        table.add_row(
+            "Multiplier jackpots", f"[blue]{self.jackpot_multiplier_counter}[/blue]"
+        )
+        table.add_row("Total times broke", f"[blue]{self.broke_counter}[/blue]")
+        table.add_row("Highscore", f"[blue]{self.highscore}[/blue]")
+        table.add_row("", "")  # Add an empty row for spacing
+        table.add_row("Your balance", f"[bold green]{self.balance}[/bold green]")
+        print(table)
 
+    def welcome(self):
+        print("\n   Welcome to the Slot Machine\n")
+        self.print_stats()
+        input("\n      Press enter to start")
+        self.clear_screen()
 
-def spin(balance):
-    json_fm_instance.update_spin_count()
-    lines = get_number_of_lines()
-    bet = validate_bet(balance)
-    print(f"You are betting ${bet}")
-
-    slots = get_slot_machine_spin(ROWS, COLS, symbol_count)
-
-    winnings, winning_lines = check_winnings(slots, lines, bet, symbol_values)
-
-    display_slotmachine(slots, winnings)
-
-    if winning_lines and winnings > 0:
-        print(f"You won \033[33m${winnings}\033[0m")
-
-    return apply_multipliers(winnings) - bet
-
-def display_slotmachine(slots, winnings):
-    print_slot_machine(slots)
-    print(slot_machine_part_3)
-    slot_machine_part_3(winnings)
-    print(slot_machine_part_4)
-    print()
-def broke(balance):
-    if balance == 0:
-        json_fm_instance.update_broke_counter()
-        json_fm_instance.save_balance(balance)
-        print("\033[33mTime to go home fren\033[0m")
-        print("We'll get that money anyway somehow")
-        return True
-
-
-def main():
-    print("\nWelcome to the slot machine!\n")
-
-    # Load spin count
-    start_spin_count = json_fm_instance.load_spin_count()
-    balance = json_fm_instance.load_balance()
-    highscore = json_fm_instance.load_highscore()
-    multiplier_count = json_fm_instance.load_multiplier_count()
-    broke_counter = json_fm_instance.load_broke_counter()
-
-    print(f"Total spins: \033[34m{start_spin_count}\033[0m")
-    check_spin_counter()
-    json_fm_instance.print_highscore(highscore)
-
-    spin_counter = (
-        start_spin_count  # Set the current spin count to the start spin count
-    )
-
-    json_fm_instance.print_multiplier_count(multiplier_count)
-
-    json_fm_instance.print_broke_counter(broke_counter)
-
-    if balance is None or balance == 0:
-        print("No balance found or balance is zero.")
-        balance = deposit()
-    else:
-        json_fm_instance.print_balance(balance)
-
-    while True:
-
-        if broke(balance):
-            break
-
-        answer = input("Press enter to play (Q to quit): ")
-
-        if answer.lower() == "q":
-            session_spins = spin_counter - start_spin_count
-            print(f"\nYou made \033[34m{session_spins}\033[0m spins this session.")
-            check_session_spins(session_spins)
-            print(
-                f"You checked out with \033[32m${balance}\033[0m. Thanks for playing!\n"
-            )
-            json_fm_instance.save_balance(balance)
-            player_controls.quit()
-        else:
-            balance += spin(balance)
-            if balance > highscore:
-                highscore = balance
-                json_fm_instance.save_highscore(highscore)
-            spin_counter += 1  # Increment spin count
-
-    # Save Json files
-    json_fm_instance.save_spin_count(spin_counter)
-    json_fm_instance.save_balance(balance)
-    json_fm_instance.save_highscore(highscore)
-    json_fm_instance.save_broke_counter(broke_counter)
-
-
-
-if __name__ == "__main__":
-    main()
+    def allin(self): ...
