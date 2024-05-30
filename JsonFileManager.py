@@ -1,5 +1,6 @@
 import os
 import json
+import sqlite3
 
 # Define the directory for JSON files
 JSON_DIR = "PLAYER_DATA"

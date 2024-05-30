@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 PLAYER_DATA/
+database.db
 
 # C extensions
 *.so
