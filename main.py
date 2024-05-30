@@ -192,12 +192,12 @@ class SlotMachine:
         return bet
 
     def clear_screen(self):
-    # For Windows
-         if os.name == 'nt':
-             os.system('cls')
-         # For Mac and Linux (os.name is 'posix')
-         else:
-              os.system('clear')
+        # For Windows
+        if os.name == 'nt':
+            os.system('cls')
+        # For Mac and Linux (os.name is 'posix')
+        else:
+            os.system('clear')
 
     def spin_time(self):
         print("\n\n\n\n\n\n\t   [bold yellow]Spinning the wheels...[/bold yellow]")
