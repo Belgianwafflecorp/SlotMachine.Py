@@ -26,7 +26,8 @@ class SlotMachine:
         self.json_fm = JsonFileManager(JSON_DIR)
         self.db = DataBase()
         self.ascii = Ascii()
-        self.load_player()
+        #self.load_player()
+        self.load_database()
         self.swap_data_old_to_new()
         self.rows = ROWS
         self.cols = COLS
@@ -37,13 +38,13 @@ class SlotMachine:
         self.slot_machine_part_3 = slot_machine_part_3
         self.slot_machine_part_4 = slot_machine_part_4
         self.min_bet = MIN_BET
-        try:
-            self.load_database()
-        except:
-            self.default_values()
-            #self.__create_table()???
-            self.save_database()
-            self.load_database()
+        # try:
+        #     self.load_database()
+        # except:
+        #     self.default_values()
+        #     #self.__create_table()???
+        #     self.save_database()
+        #     self.load_database()
 
     def load_player(self):  # old
         self.balance = self.json_fm.load_balance()
@@ -98,25 +99,26 @@ class SlotMachine:
         self.json_fm.save_best_spin(self.best_spin)
         self.json_fm.save_jackpot_multiplier_counter(self.jackpot_multiplier_counter)
 
-    # def update_multiplier_counter(self):
-    #     self.multiplier_counter += 1
-    #     self.save_player()
+    def update_spin_counter(self):
+        self.spin_counter += 1
+        self.db.update_column("spin_count", self.spin_counter)
 
-    # def update_broke_counter(self):
-    #     self.broke_counter += 1
-    #     self.save_player()
+    def update_multiplier_counter(self):
+        self.multiplier_counter += 1
+        self.db.update_column("multiplier_count", self.multiplier_counter)
 
-    # def update_spin_counter(self):
-    #     self.spin_counter += 1
-    #     self.save_player()
+    def update_broke_counter(self):
+        self.broke_counter += 1
+        self.db.update_column("broke_counter", self.broke_counter)
 
     def check_highscore(self):
         self.highscore = max(self.highscore, self.balance)
-        self.save_player()
+        self.save_database()
 
     def check_player_broke(self):
         if self.balance < 1:
-            self.db.increment_column("broke_counter")
+            self.update_broke_counter()
+            self.clear_screen()
             print("Your out of chips, make a new deposit to continue playing")
             self.deposit()
 
@@ -128,11 +130,15 @@ class SlotMachine:
                 match amount:
                     case 1069:
                         print("\nCheeky basterd. I'll let that one slide.\n")
+                        amount = 1069
+                        break
                     case _ if amount > 1000:
                         print("Don't get over your head. You get $1000 to start with.")
                         amount = 1000
+                        break
                     case _ if amount <= 0:
                         print("Please enter a positive amount.")
+                        break
                     case _:
                         break
             else:
@@ -158,9 +164,7 @@ class SlotMachine:
                 )
 
             s += " |\n" if i != self.rows - 1 else " |"
-        return s
-
-        
+        return s     
 
     def display_slot_machine(self):
         print(self.slot_machine_part_1)
@@ -204,7 +208,6 @@ class SlotMachine:
             end=" ",
             )
         
-
     def get_bet(self):
         bet = None
         while bet is None:
@@ -257,13 +260,13 @@ class SlotMachine:
         if bet > self.balance:
             print("You don't have enough balance")
             return
-        self.sessie_spins += 1
         self.balance -= bet
         self.spin_time()
         self.get_slot_machine_spin()
         self.get_winnings(bet)
         self.display_slot_machine()
         self.check_best_spin()
+        self.update_spin_counter()
 
         # ask if the player wants to use the multiplier
         if self.winnings > 0:
@@ -283,7 +286,6 @@ class SlotMachine:
             print(f"[bold yellow]{random.choice(quotes_loss)}[/bold yellow]")
         else:
             print(f"[bold yellow]{random.choice(quotes_win)}[/bold yellow]")
-        self.db.increment_column("spin_count")
         self.check_highscore()
         self.save_database()
         return bet
@@ -291,6 +293,7 @@ class SlotMachine:
     def use_multiplier(self):
         # get the multiplier
         multiplier = self.get_multiplier()
+        self.update_multiplier_counter()
         # multiply the winnings
 
         self.winnings *= multiplier

@@ -8,13 +8,17 @@ os.system("winget install --id Microsoft.WindowsTerminal -e")
 
 
 def main():
-    slot_machine = SlotMachine()
-    slot_machine.clear_screen()
-    slot_machine.welcome()
-    controls = PlayerControls(slot_machine)
+    slotmachine = SlotMachine()
+    slotmachine.load_database()
+    slotmachine.clear_screen()
+    slotmachine.welcome()
+    if slotmachine.balance == 0:
+        slotmachine.deposit()
+    controls = PlayerControls(slotmachine)
     while True:
+        slotmachine.check_player_broke()
         controls.get_input()
-
+        slotmachine.save_database()
 
 if __name__ == "__main__":
     main()
