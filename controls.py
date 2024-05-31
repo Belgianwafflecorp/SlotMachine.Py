@@ -1,12 +1,14 @@
 import sys
 from rich import print
 from rich.table import Table
+from slotmachine import DataBase
 
 
 class PlayerControls:
     def __init__(self, slotmachine=None | object):
         self.slotmachine = slotmachine  # Assuming you have a slot machine object
         self.first_time = True
+        self.db = DataBase()
 
     def print_help(self):
         self.slotmachine.clear_screen()
@@ -20,8 +22,10 @@ class PlayerControls:
         print(t)
 
     def quit(self):
+        self.slotmachine.clear_screen()
         self.slotmachine.save_database()
-        
+        print(f"\nYou checked out with ${self.db.get_column('balance')}")
+        print("\nDon't forget to come back and try your luck again!\n")
         sys.exit()  # Quit the application
 
     def stats(self):
