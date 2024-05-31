@@ -4,6 +4,7 @@ import random
 from JsonFileManager import JsonFileManager
 from quotes import quotes_win, quotes_loss
 from database import DataBase
+from ascii_art import Ascii
 from settings import (
     ROWS,
     COLS,
@@ -15,7 +16,6 @@ from settings import (
     slot_machine_part_3,
     slot_machine_part_4,
     probabilities,
-    print_ascii_jackpot,
 )
 from rich import print
 from rich.table import Table
@@ -25,6 +25,7 @@ class SlotMachine:
     def __init__(self) -> None:
         self.json_fm = JsonFileManager(JSON_DIR)
         self.db = DataBase()
+        self.ascii = Ascii()
         self.load_player()
         self.swap_data_old_to_new()
         self.rows = ROWS
@@ -310,7 +311,7 @@ class SlotMachine:
                 print(
                     "[bold magenta]You hit the jackpot! Your winnings are multiplied by 1000![/bold magenta]"
                 )
-                print_ascii_jackpot()
+                self.ascii.jackpot()
                 self.db.increment_column("jackpot_multiplier_counter")
             case 100:
                 print(

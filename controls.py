@@ -21,6 +21,7 @@ class PlayerControls:
 
     def quit(self):
         self.slotmachine.save_database()
+        
         sys.exit()  # Quit the application
 
     def stats(self):
