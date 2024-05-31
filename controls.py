@@ -70,6 +70,6 @@ class PlayerControls:
         if self.first_time:
             self.print_help()
             self.first_time = False
-        self.slotmachine.display_balance()
+        self.slotmachine.ask_for_command_or_new_bet()
         command = input().strip().lower()
         self.get_command(command)

@@ -25,8 +25,8 @@ class SlotMachine:
     def __init__(self) -> None:
         self.json_fm = JsonFileManager(JSON_DIR)
         self.db = DataBase()
-        # self.load_player()
-        # self.swap_data_old_to_new()
+        self.load_player()
+        self.swap_data_old_to_new()
         self.rows = ROWS
         self.cols = COLS
         self.sessie_spins = 0
@@ -36,7 +36,13 @@ class SlotMachine:
         self.slot_machine_part_3 = slot_machine_part_3
         self.slot_machine_part_4 = slot_machine_part_4
         self.min_bet = MIN_BET
-        self.load_database()
+        try:
+            self.load_database()
+        except:
+            self.default_values()
+            #self.__create_table()???
+            self.save_database()
+            self.load_database()
 
     def load_player(self):  # old
         self.balance = self.json_fm.load_balance()
@@ -188,8 +194,9 @@ class SlotMachine:
             for _ in range(self.cols)
         ]
 
-    def display_balance(self):
+    def ask_for_command_or_new_bet(self):
         print(
+            f"Balance: ${self.balance}\n"
             f"Enter a command (-help)\n"
             f"Press enter to bet ({self.previous_bet})\n"
             f"Place a bet between {self.min_bet} and {self.db.get_column("max_bet")}:",
@@ -201,7 +208,7 @@ class SlotMachine:
         bet = None
         while bet is None:
             # show balance
-            self.display_balance()
+            self.ask_for_command_or_new_bet()
             bet = input()
             if bet.isdigit():
                 bet = int(bet)

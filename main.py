@@ -2,9 +2,8 @@ from slotmachine import SlotMachine
 from controls import PlayerControls
 
 # winget install --id Microsoft.WindowsTerminal -e
-# enter the following command in the terminal to install the windows terminal
+# Windows Terminal is not required to run the game, but it is recommended for a better experience.
 import os
-
 os.system("winget install --id Microsoft.WindowsTerminal -e")
 
 

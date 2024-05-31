@@ -10,7 +10,7 @@ class DataBase:
     This class is responsible for the database connection and the cursor.
 
     the data base is called database.db
-    and will consist 1 table with only 1 row and 7 column\
+    and will consist 1 table with only 1 row and 9 column\
     
     the columns are:
     1. balance INTEGER
