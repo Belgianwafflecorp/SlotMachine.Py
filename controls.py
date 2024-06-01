@@ -2,6 +2,7 @@ import sys
 from rich import print
 from rich.table import Table
 from slotmachine import DataBase
+import settings
 
 
 class PlayerControls:
@@ -9,6 +10,7 @@ class PlayerControls:
         self.slotmachine = slotmachine  # Assuming you have a slot machine object
         self.first_time = True
         self.db = DataBase()
+        self.settings = settings
 
     def print_help(self):
         self.slotmachine.clear_screen()
@@ -18,9 +20,12 @@ class PlayerControls:
         t.add_row("-help", "Show available controls and their descriptions.")
         t.add_row("-quit", "Quit the game.")
         t.add_row("-stats", "Show your statistics.")
+        t.add_row("-win", "Show possible winnings.")
         t.add_row("-delete", "Delete player stats.")
         # t.add_row("-allin", "Exactly what you think, going all in!")
         print(t)
+        input("Press enter to continue...")
+        self.slotmachine.clear_screen()
 
     def quit(self):
         self.slotmachine.clear_screen()
@@ -32,6 +37,8 @@ class PlayerControls:
     def stats(self):
         self.slotmachine.clear_screen()
         self.slotmachine.print_stats()
+        input("Press enter to continue...")
+        self.slotmachine.clear_screen()
 
     def allin(self):
         # print("Betting all your balance!")
@@ -41,6 +48,22 @@ class PlayerControls:
     def spin(self):
         print("Spinning the slot machine!")
         self.slotmachine.spin()
+
+    def possible_winnings(self):
+        self.slotmachine.clear_screen()
+        t = Table(title="Possible Winnings")
+        t.add_column("Symbol", style="cyan")
+        t.add_column("Multiplier", style="cyan")
+
+        for symbol, multiplier in self.settings.symbol_values.items():
+            t.add_row(symbol*3, str(multiplier))
+
+        print(t)
+        print("\n[bold yellow]Having more than one winning line will give combo bonuses![/bold yellow]")
+        print("[bold yellow]For each combo, you will get an extra 20% of the total winnings![/bold yellow]\n")
+        print(":potato: lines will add to the bonus combo lines.\n")
+        input("Press enter to continue...")
+        self.slotmachine.clear_screen()
 
     def get_command(self, command):
         match command:
@@ -52,6 +75,8 @@ class PlayerControls:
                 self.stats()
             case "-allin":
                 self.allin()
+            case "-win":
+                self.possible_winnings()
             case "-delete":
                 self.slotmachine.delete_player()
             case "":
@@ -76,7 +101,7 @@ class PlayerControls:
 
     def get_input(self):
         if self.first_time:
-            self.print_help()
+            #self.print_help()
             self.first_time = False
         self.slotmachine.ask_for_command_or_new_bet()
         command = input().strip().lower()

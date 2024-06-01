@@ -8,6 +8,7 @@ ROWS = 3
 COLS = 3
 
 symbol_count = {
+    "🤑": 1,
     ":apple:": 5,
     ":banana:": 10,
     ":watermelon:": 20,
@@ -20,10 +21,12 @@ symbol_count = {
 #     ":watermelon:" : 20,
 #     ":cherries:" : 100,
 #     ":potato:" : 25,
+#     "🤑" : 1000,
 # }
 
 
 symbol_values = {
+    "🤑": 1000,
     ":apple:": 10,
     ":banana:": 5,
     ":watermelon:": 3,

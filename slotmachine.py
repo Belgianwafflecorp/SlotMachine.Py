@@ -58,6 +58,7 @@ class SlotMachine:
             self.default_values()
             self.save_database()
             self.load_database()
+            self.clear_screen()
         else:
             self.clear_screen()
             print("\nPlayer stats were not deleted.\n")
@@ -94,19 +95,20 @@ class SlotMachine:
         self.multiplier_counter += 1
         self.db.update_column("multiplier_count", self.multiplier_counter)
 
-    def update_broke_counter(self):
-        self.broke_counter += 1
-        self.db.update_column("broke_counter", self.broke_counter)
-
     def check_highscore(self):
         self.highscore = max(self.highscore, self.balance)
         self.save_database()
+
+    def update_broke_counter(self):
+        self.broke_counter += 1
+        self.db.update_column("broke_counter", self.broke_counter)
 
     def check_player_broke(self):
         if self.balance < 1:
             self.update_broke_counter()
             self.clear_screen()
-            print("Your out of chips, make a new deposit to continue playing")
+            print("\nsorry, you are out of chips")
+            print("Make a new deposit to continue playing")
             self.deposit()
 
     def deposit(self):
@@ -261,14 +263,13 @@ class SlotMachine:
             use_multiplier = input()
             if use_multiplier.lower() != "n":
                 self.use_multiplier()
-                self.db.increment_column("multiplier_count")
 
             else:
                 print("You chose not to use the multiplier")
         self.balance += self.winnings
         if self.balance <= 0:
-            self.db.increment_column("broke_counter")
-            print(f"[bold yellow on white]{random.choice(quotes_loss)}[/bold yellow on white]")
+            self.check_player_broke()
+            print(f"[bold yellow]{random.choice(quotes_loss)}[/bold yellow]")
         elif self.winnings == 0:
             print(f"[bold yellow]{random.choice(quotes_loss)}[/bold yellow]")
         else:

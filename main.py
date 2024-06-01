@@ -12,10 +12,11 @@ def main():
     slotmachine.load_database()
     slotmachine.clear_screen()
     slotmachine.welcome()
-    if slotmachine.balance == 0:
-        slotmachine.deposit()
     controls = PlayerControls(slotmachine)
+    
     while True:
+        if slotmachine.balance == 0:
+            slotmachine.deposit()
         slotmachine.check_player_broke()
         controls.get_input()
         slotmachine.save_database()
