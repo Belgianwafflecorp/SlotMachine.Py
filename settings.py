@@ -16,12 +16,12 @@ symbol_count = {
     ":potato:": 25,
 }
 # symbol_count = { # debugging making the cherries more common
+#     "🤑" : 1000,
 #     ":apple:" : 5,
 #     ":banana:" : 10,
 #     ":watermelon:" : 20,
 #     ":cherries:" : 100,
 #     ":potato:" : 25,
-#     "🤑" : 1000,
 # }
 
 
