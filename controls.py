@@ -18,6 +18,7 @@ class PlayerControls:
         t.add_row("-help", "Show available controls and their descriptions.")
         t.add_row("-quit", "Quit the game.")
         t.add_row("-stats", "Show your statistics.")
+        t.add_row("-delete", "Delete player stats.")
         # t.add_row("-allin", "Exactly what you think, going all in!")
         print(t)
 
@@ -51,6 +52,8 @@ class PlayerControls:
                 self.stats()
             case "-allin":
                 self.allin()
+            case "-delete":
+                self.slotmachine.delete_player()
             case "":
                 self.slotmachine.spin(self.slotmachine.db.get_column("previous_bet"))
             case _:

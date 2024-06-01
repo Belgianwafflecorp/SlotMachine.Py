@@ -51,6 +51,17 @@ class SlotMachine:
         self.previous_bet = 1
         self.max_bet = 100
 
+    def delete_player(self):
+        print("\nAre you sure you want to delete your player stats? (y/n):", end=" ")
+        choice = input().lower()
+        if choice == "y":
+            self.default_values()
+            self.save_database()
+            self.load_database()
+        else:
+            self.clear_screen()
+            print("\nPlayer stats were not deleted.\n")
+
     def load_database(self):
         self.balance = self.db.get_column("balance")
         self.highscore = self.db.get_column("highscore")
