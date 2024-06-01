@@ -1,8 +1,5 @@
 import sqlite3
 import os
-import JsonFileManager
-
-json_fm = JsonFileManager.JsonFileManager("PLAYER_DATA")
 
 
 class DataBase:

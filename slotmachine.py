@@ -1,7 +1,6 @@
 import os
 import time
 import random
-from JsonFileManager import JsonFileManager
 from quotes import quotes_win, quotes_loss
 from database import DataBase
 from ascii_art import Ascii
@@ -23,12 +22,8 @@ from rich.table import Table
 
 class SlotMachine:
     def __init__(self) -> None:
-        self.json_fm = JsonFileManager(JSON_DIR)
         self.db = DataBase()
         self.ascii = Ascii()
-        #self.load_player()
-        self.load_database()
-        self.swap_data_old_to_new()
         self.rows = ROWS
         self.cols = COLS
         self.sessie_spins = 0
@@ -38,22 +33,23 @@ class SlotMachine:
         self.slot_machine_part_3 = slot_machine_part_3
         self.slot_machine_part_4 = slot_machine_part_4
         self.min_bet = MIN_BET
-        # try:
-        #     self.load_database()
-        # except:
-        #     self.default_values()
-        #     #self.__create_table()???
-        #     self.save_database()
-        #     self.load_database()
+        try:
+            self.load_database()
+        except:
+            self.default_values()
+            self.save_database()
+            self.load_database()
 
-    def load_player(self):  # old
-        self.balance = self.json_fm.load_balance()
-        self.highscore = self.json_fm.load_highscore()
-        self.spin_counter = self.json_fm.load_spin_count()
-        self.multiplier_counter = self.json_fm.load_multiplier_count()
-        self.broke_counter = self.json_fm.load_broke_counter()
-        self.best_spin = self.json_fm.load_best_spin()
-        self.jackpot_multiplier_counter = self.json_fm.load_jackpot_multiplier_counter()
+    def default_values(self):
+        self.balance = 0
+        self.highscore = 0
+        self.spin_counter = 0
+        self.multiplier_counter = 0
+        self.broke_counter = 0
+        self.best_spin = 0
+        self.jackpot_multiplier_counter = 0
+        self.previous_bet = 1
+        self.max_bet = 100
 
     def load_database(self):
         self.balance = self.db.get_column("balance")
@@ -75,29 +71,9 @@ class SlotMachine:
         self.db.update_column("multiplier_count", self.multiplier_counter)
         self.db.update_column("broke_counter", self.broke_counter)
         self.db.update_column("best_spin", self.best_spin)
-        self.db.update_column(
-            "jackpot_multiplier_counter", self.jackpot_multiplier_counter
-        )
+        self.db.update_column("jackpot_multiplier_counter", self.jackpot_multiplier_counter)
         self.db.update_column("previous_bet", self.previous_bet)
         self.db.update_column("max_bet", self.max_bet)
-
-    def swap_data_old_to_new(self):
-        self.db.update_column("balance", self.json_fm.load_balance())
-        self.db.update_column("highscore", self.json_fm.load_highscore())
-        self.db.update_column("spin_count", self.json_fm.load_spin_count())
-        self.db.update_column("multiplier_count", self.json_fm.load_multiplier_count())
-        self.db.update_column("broke_counter", self.json_fm.load_broke_counter())
-        self.db.update_column("best_spin", self.json_fm.load_best_spin())
-        self.db.update_column("jackpot_multiplier_counter", self.json_fm.load_jackpot_multiplier_counter())
-
-    def save_player(self):  # old
-        self.json_fm.save_balance(self.balance)
-        self.json_fm.save_highscore(self.highscore)
-        self.json_fm.save_spin_count(self.spin_counter)
-        self.json_fm.save_multiplier_count(self.multiplier_counter)
-        self.json_fm.save_broke_counter(self.broke_counter)
-        self.json_fm.save_best_spin(self.best_spin)
-        self.json_fm.save_jackpot_multiplier_counter(self.jackpot_multiplier_counter)
 
     def update_spin_counter(self):
         self.spin_counter += 1
