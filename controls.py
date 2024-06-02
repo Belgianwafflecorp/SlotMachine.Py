@@ -3,6 +3,7 @@ from rich import print
 from rich.table import Table
 from slotmachine import DataBase
 import settings
+from dealer import Dealer
 
 
 class PlayerControls:
@@ -11,6 +12,7 @@ class PlayerControls:
         self.first_time = True
         self.db = DataBase()
         self.settings = settings
+        self.dealer = Dealer()
 
     def print_help(self):
         self.slotmachine.clear_screen()
@@ -21,6 +23,7 @@ class PlayerControls:
         t.add_row("-quit", 'Quit the game.')
         t.add_row("-stats", 'Show your statistics.')
         t.add_row("-win", 'Show possible winnings.')
+        t.add_row("-dealer", 'Ask the dealer to increase your max bet.')
         t.add_row("-delete", 'Delete player stats.')
         # t.add_row("-allin", "Exactly what you think, going all in!")
         print(t)
@@ -77,6 +80,8 @@ class PlayerControls:
                 self.allin()
             case "-win":
                 self.possible_winnings()
+            case "-dealer":
+                self.dealer.player_ask_dealer()
             case "-delete":
                 self.slotmachine.delete_player()
             case "":

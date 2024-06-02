@@ -10,7 +10,6 @@ from settings import (
     MIN_BET,
     symbol_count,
     symbol_values,
-    JSON_DIR,
     slot_machine_part_1,
     slot_machine_part_3,
     slot_machine_part_4,
@@ -18,6 +17,7 @@ from settings import (
 )
 from rich import print
 from rich.table import Table
+from dealer import Dealer
 
 
 class SlotMachine:
@@ -33,6 +33,7 @@ class SlotMachine:
         self.slot_machine_part_3 = slot_machine_part_3
         self.slot_machine_part_4 = slot_machine_part_4
         self.min_bet = MIN_BET
+        self.dealer = Dealer
         try:
             self.load_database()
         except:
@@ -106,6 +107,7 @@ class SlotMachine:
     def check_player_broke(self):
         if self.balance < 1:
             self.update_broke_counter()
+            self.dealer.default_max_bet()
             self.clear_screen()
             print("\nsorry, you are out of chips")
             print("Make a new deposit to continue playing")
