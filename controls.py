@@ -15,13 +15,13 @@ class PlayerControls:
     def print_help(self):
         self.slotmachine.clear_screen()
         t = Table(title="Controls")
-        t.add_column("Control", style="cyan")
-        t.add_column("Description", style="cyan")
-        t.add_row("-help", "Show available controls and their descriptions.")
-        t.add_row("-quit", "Quit the game.")
-        t.add_row("-stats", "Show your statistics.")
-        t.add_row("-win", "Show possible winnings.")
-        t.add_row("-delete", "Delete player stats.")
+        t.add_column("Control", style='cyan')
+        t.add_column("Description", style='cyan')
+        t.add_row("-help", 'Show available controls and their descriptions.')
+        t.add_row("-quit", 'Quit the game.')
+        t.add_row("-stats", 'Show your statistics.')
+        t.add_row("-win", 'Show possible winnings.')
+        t.add_row("-delete", 'Delete player stats.')
         # t.add_row("-allin", "Exactly what you think, going all in!")
         print(t)
         input("Press enter to continue...")
@@ -52,8 +52,8 @@ class PlayerControls:
     def possible_winnings(self):
         self.slotmachine.clear_screen()
         t = Table(title="Possible Winnings")
-        t.add_column("Symbol", style="cyan")
-        t.add_column("Multiplier", style="cyan")
+        t.add_column("Symbol", style='cyan')
+        t.add_column("Multiplier", style='cyan')
 
         for symbol, multiplier in self.settings.symbol_values.items():
             t.add_row(symbol*3, str(multiplier))

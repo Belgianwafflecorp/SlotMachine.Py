@@ -52,7 +52,7 @@ class SlotMachine:
         self.max_bet = 100
 
     def delete_player(self):
-        print("\nAre you sure you want to delete your player stats? (y/n):", end=" ")
+        print("\nAre you sure you want to delete your player stats? (y/n):", end=' ')
         choice = input().lower()
         if choice == "y":
             self.default_values()
@@ -64,17 +64,17 @@ class SlotMachine:
             print("\nPlayer stats were not deleted.\n")
 
     def load_database(self):
-        self.balance = self.db.get_column("balance")
-        self.highscore = self.db.get_column("highscore")
-        self.spin_counter = self.db.get_column("spin_count")
-        self.multiplier_counter = self.db.get_column("multiplier_count")
-        self.broke_counter = self.db.get_column("broke_counter")
-        self.best_spin = self.db.get_column("best_spin")
+        self.balance = self.db.get_column('balance')
+        self.highscore = self.db.get_column('highscore')
+        self.spin_counter = self.db.get_column('spin_count')
+        self.multiplier_counter = self.db.get_column('multiplier_count')
+        self.broke_counter = self.db.get_column('broke_counter')
+        self.best_spin = self.db.get_column('best_spin')
         self.jackpot_multiplier_counter = self.db.get_column(
-            "jackpot_multiplier_counter"
+            'jackpot_multiplier_counter'
         )
-        self.previous_bet = self.db.get_column("previous_bet")
-        self.max_bet = self.db.get_column("max_bet")
+        self.previous_bet = self.db.get_column('previous_bet')
+        self.max_bet = self.db.get_column('max_bet')
 
     def save_database(self):
         self.db.update_column("balance", self.balance)
@@ -205,7 +205,7 @@ class SlotMachine:
             bet = input()
             if bet.isdigit():
                 bet = int(bet)
-                if bet < self.min_bet or bet > self.db.get_column("max_bet"):
+                if bet < self.min_bet or bet > self.db.get_column('max_bet'):
                     print(f"Please enter a bet between ${self.min_bet} and ${self.db.get_column('max_bet')}.")
                     bet = None
                     continue
@@ -240,11 +240,11 @@ class SlotMachine:
         if bet is None:
             bet = self.get_bet()
         elif bet < self.min_bet or bet > self.max_bet:
-            print(f"Please enter a bet between ${self.min_bet} and ${self.db.get_column("max_bet")}.")
+            print(f"Please enter a bet between ${self.min_bet} and ${self.db.get_column('max_bet')}.")
             return
         else:
             self.previous_bet = bet
-            self.db.update_column("previous_bet", bet)
+            self.db.update_column('previous_bet', bet)
         self.clear_screen()  # clear the screen (nicer experience for the player)
         if bet > self.balance:
             print("You don't have enough balance")
@@ -259,7 +259,7 @@ class SlotMachine:
 
         # ask if the player wants to use the multiplier
         if self.winnings > 0:
-            print("Would you like to use the multiplier? (n to SKIP):", end=" ")
+            print("Would you like to use the multiplier? (n to SKIP):", end=' ')
             use_multiplier = input()
             if use_multiplier.lower() != "n":
                 self.use_multiplier()
@@ -303,7 +303,7 @@ class SlotMachine:
                     "[bold magenta]You hit the jackpot! Your winnings are multiplied by 1000![/bold magenta]"
                 )
                 self.ascii.jackpot()
-                self.db.increment_column("jackpot_multiplier_counter")
+                self.db.increment_column('jackpot_multiplier_counter')
             case 100:
                 print(
                     "[bold magenta]You got a huge win! Your winnings are multiplied by 100![/bold magenta]"
