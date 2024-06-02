@@ -87,7 +87,7 @@ class PlayerControls:
                     bet = int(command)
                     if bet < 0:
                         self.slotmachine.clear_screen() 
-                        print("Invalid command. Please try again.")
+                        print("Invalid command. Please try again.\n")
                         return
                     # check if the bet is higher than the max or lower than the min
                     if (
@@ -95,12 +95,12 @@ class PlayerControls:
                         or bet < self.slotmachine.min_bet
                     ):
                         self.slotmachine.clear_screen()
-                        print("Invalid bet. Please try again.")
+                        print("Invalid bet. Please try again.\n")
                         return
                     self.slotmachine.spin(bet)
                 except ValueError:
                     self.slotmachine.clear_screen()
-                    print("Invalid command. Please try again.")
+                    print("Invalid command. Please try again.\n")
 
     def get_input(self):
         if self.first_time:
