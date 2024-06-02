@@ -170,8 +170,3 @@ class DataBase:
     def delete_all_player_data(self):
         self.cursor.execute("DELETE FROM data")
         self.conn.commit()
-
-    # delete the old jsons
-    def delete_player_data_folder():
-        if os.path.exists("PLAYER_DATA"):
-            os.rmdir("PLAYER_DATA")

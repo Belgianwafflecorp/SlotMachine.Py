@@ -193,7 +193,7 @@ class SlotMachine:
             f"Balance: ${self.balance}\n"
             f"Enter a command (-help)\n"
             f"Press enter to bet ({self.previous_bet})\n"
-            f"Place a bet between {self.min_bet} and {self.db.get_column("max_bet")}:",
+            f"Place a bet between {self.min_bet} and {self.db.get_column('max_bet')}:",
             end=" ",
             )
         
