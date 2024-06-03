@@ -85,7 +85,7 @@ class PlayerControls:
             case "-delete":
                 self.slotmachine.delete_player()
             case "":
-                self.slotmachine.spin(self.slotmachine.db.get_column("previous_bet"))
+                self.slotmachine.spin(self.db.get_column("previous_bet"))
             case _:
                 # check if the command is a number
                 try:
@@ -96,7 +96,7 @@ class PlayerControls:
                         return
                     # check if the bet is higher than the max or lower than the min
                     if (
-                        bet > self.slotmachine.db.get_column("max_bet")
+                        bet > self.db.get_column("max_bet")
                         or bet < self.slotmachine.min_bet
                     ):
                         self.slotmachine.clear_screen()
