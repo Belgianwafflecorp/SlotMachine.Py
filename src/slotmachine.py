@@ -22,7 +22,7 @@ from dealer import Dealer
 
 class SlotMachine:
     def __init__(self) -> None:
-        self.player_db = DataBase()
+        self.player_db = DataBase() #instance of the database class
         self.ascii = Ascii()
         self.rows = ROWS
         self.cols = COLS
@@ -33,7 +33,7 @@ class SlotMachine:
         self.slot_machine_part_3 = slot_machine_part_3
         self.slot_machine_part_4 = slot_machine_part_4
         self.min_bet = MIN_BET
-        self.dealer = Dealer
+        self.dealer = Dealer(self) #instance of slotmachine to dealer class 
         try:
             self.load_database()
         except:
@@ -50,7 +50,7 @@ class SlotMachine:
         self.best_spin = 0
         self.jackpot_multiplier_counter = 0
         self.previous_bet = 1
-        self.max_bet = 100
+        self.player_db.update_column("max_bet", 100)
 
     def delete_player(self):
         print("\nAre you sure you want to delete your player stats? (y/n):", end=' ')
@@ -58,7 +58,6 @@ class SlotMachine:
         if choice == "y":
             self.default_values()
             self.save_database()
-            self.load_database()
             self.clear_screen()
         else:
             self.clear_screen()
@@ -86,7 +85,6 @@ class SlotMachine:
         self.player_db.update_column("best_spin", self.best_spin)
         self.player_db.update_column("jackpot_multiplier_counter", self.jackpot_multiplier_counter)
         self.player_db.update_column("previous_bet", self.previous_bet)
-        self.player_db.update_column("max_bet", self.max_bet)
 
     def update_spin_counter(self):
         self.spin_counter += 1

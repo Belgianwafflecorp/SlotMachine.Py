@@ -3,7 +3,6 @@ from rich import print
 from rich.table import Table
 from slotmachine import DataBase
 import settings
-from dealer import Dealer
 
 
 class PlayerControls:
@@ -12,7 +11,7 @@ class PlayerControls:
         self.first_time = True
         self.db = DataBase()
         self.settings = settings
-        self.dealer = Dealer()
+        self.dealer = slotmachine.dealer
 
     def print_help(self):
         self.slotmachine.clear_screen()
