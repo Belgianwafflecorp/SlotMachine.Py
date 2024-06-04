@@ -1,16 +1,12 @@
-import sys
+from typing import Any
 import os
 from rich import print
-from rich.table import Table
-from slotmachine import DataBase
-import slotmachine
 import settings
 
 class Dealer:
-
-    def __init__(self):
-        self.db = slotmachine.DataBase()
-        self.settings = settings
+    def __init__(self, slotmachine: Any):
+        self.db = slotmachine.player_db #calling the database from the slotmachine
+        self.settings = settings #using the settings file
         self.slotmachine = slotmachine
 
     def lv_up_max_bet(self, amount):
@@ -42,6 +38,8 @@ class Dealer:
                 print(f"The maximum bet we can let you place now is 1000")
             else:
                 print("You do not meet the requirements to increase your max bet.\n")
+
+            print(self.db.get_data())
 
         
     def clear_screen(self):
