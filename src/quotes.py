@@ -15,6 +15,7 @@ quotes_win = [
     "Jackpot dreams and spinning reels.",
     "The sound of spinning reels, music to the ears.",
     "Dare to dream big, spin to win big.",
+    "Let's goooooooooooooo!",
 ]
 
 quotes_loss = [
