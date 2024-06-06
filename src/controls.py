@@ -24,7 +24,7 @@ class PlayerControls:
         t.add_row("-win", 'Show possible winnings.')
         t.add_row("-dealer", 'Ask the dealer to increase your max bet.')
         t.add_row("-delete", 'Delete player stats.')
-        # t.add_row("-allin", "Exactly what you think, going all in!")
+        t.add_row("-allin", "Exactly what you think, going all in!")
         print(t)
         input("Press enter to continue...")
         self.slotmachine.clear_screen()
@@ -43,9 +43,14 @@ class PlayerControls:
         self.slotmachine.clear_screen()
 
     def allin(self):
-        # print("Betting all your balance!")
-        # self.slotmachine.allin()
-        ...
+        choice = input("Are you sure you want to go all in? (y/n): ")
+        if choice.lower() != "n":
+            allin_bet = self.db.get_column('balance')
+            real_max_bet = self.db.get_column('max_bet')
+            self.db.update_column('max_bet', allin_bet)
+            self.slotmachine.allin(allin_bet)
+            self.db.update_column('max_bet', real_max_bet)
+
 
     def spin(self):
         print("Spinning the slot machine!")

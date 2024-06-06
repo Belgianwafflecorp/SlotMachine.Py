@@ -40,6 +40,7 @@ class Dealer:
                 print("You do not meet the requirements to increase your max bet.\n")
 
             #print(self.db.get_data()) #debugging
+        
 
     def clear_screen(self):
         # For Windows

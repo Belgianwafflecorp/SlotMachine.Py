@@ -118,19 +118,23 @@ class SlotMachine:
                 amount = int(amount)
                 match amount:
                     case 1069:
+                        self.clear_screen()
                         print("\nCheeky basterd. I'll let that one slide.\n")
                         amount = 1069
                         break
                     case _ if amount > 1000:
+                        self.clear_screen()
                         print("Don't get over your head. You get $1000 to start with.")
                         amount = 1000
                         break
                     case _ if amount <= 0:
+                        self.clear_screen()
                         print("Please enter a positive amount.")
                         break
                     case _:
                         break
             else:
+                self.clear_screen()
                 print("Please enter a valid amount.")
         self.balance += amount
         self.save_database()
@@ -380,4 +384,50 @@ class SlotMachine:
         input("\n      Press enter to start")
         self.clear_screen()
 
-    def allin(self): ...
+    def allin_shout(self):
+        self.clear_screen()
+        print("\n\n\n\n\n\n\t   [bold yellow]LETS[/bold yellow]")
+        time.sleep(1)
+        self.clear_screen()
+        print("\n\n\n\n\n\n\t   [bold yellow]GET[/bold yellow]")
+        time.sleep(1)
+        self.clear_screen()
+        print("\n\n\n\n\n\n\t   [bold yellow]READY[/bold yellow]")
+        time.sleep(1)
+        self.clear_screen()
+        print("\n\n\n\n\n\n\t   [bold yellow]TOO[/bold yellow]")
+        time.sleep(1)
+        self.clear_screen()
+        print("\n\n\n\n\n\n\t   [bold yellow]RUMBLEEEEE !!![/bold yellow]")
+        time.sleep(1)
+        self.clear_screen()
+
+    def allin(self, bet): 
+        self.allin_shout()
+        self.clear_screen()  
+        self.balance -= bet
+        self.get_slot_machine_spin()
+        self.get_winnings(bet)
+        self.display_slot_machine()
+        self.check_best_spin()
+        self.update_spin_counter()
+
+        # ask if the player wants to use the multiplier
+        if self.winnings > 0:
+            print("Would you like to use the multiplier? (n to SKIP):", end=' ')
+            use_multiplier = input()
+            if use_multiplier.lower() != "n":
+                self.use_multiplier()
+
+            else:
+                print("You chose not to use the multiplier")
+        self.balance += self.winnings
+        if self.balance > 0:
+            print(f"[bold yellow]{random.choice(quotes_win)}[/bold yellow]")
+        else :
+            print("[bold yellow]Please don't tell use you borrowed that money.[/bold yellow]\n")
+            print("You can get that back if you continue playing.")
+        
+        self.check_highscore()
+        self.save_database()
+        return bet
