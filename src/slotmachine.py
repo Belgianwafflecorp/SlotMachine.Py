@@ -425,7 +425,8 @@ class SlotMachine:
         if self.balance > 0:
             print(f"[bold yellow]{random.choice(quotes_win)}[/bold yellow]")
         else :
-            print("[bold yellow]Please don't tell use you borrowed that money.[/bold yellow]\n")
+            self.update_broke_counter()
+            print("[bold yellow]Please don't tell us you borrowed that money.[/bold yellow]\n")
             print("You can get that back if you continue playing.")
         
         self.check_highscore()
