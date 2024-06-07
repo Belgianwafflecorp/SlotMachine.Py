@@ -19,6 +19,7 @@ class DataBase:
     7. jackpot_multiplier_counter INTEGER
     8. previous_bet INTEGER
     9. max_bet INTEGER
+    10. allin_count INTEGER
     """
 
     def __init__(
@@ -34,7 +35,7 @@ class DataBase:
     # with default values
     def __create_table(self):
         self.cursor.execute(
-            "CREATE TABLE IF NOT EXISTS data(balance INTEGER, highscore INTEGER, spin_count INTEGER, multiplier_count INTEGER, broke_counter INTEGER, best_spin INTEGER, jackpot_multiplier_counter INTEGER, previous_bet INTEGER, max_bet INTEGER default 100)"
+            "CREATE TABLE IF NOT EXISTS data(balance INTEGER, highscore INTEGER, spin_count INTEGER, multiplier_count INTEGER, broke_counter INTEGER, best_spin INTEGER, jackpot_multiplier_counter INTEGER, previous_bet INTEGER, max_bet INTEGER default 100, INTEGER allin_count default 0)"
         )
         self.conn.commit()
 
@@ -49,9 +50,10 @@ class DataBase:
         jackpot_multiplier_counter,
         previous_bet,
         max_bet,
+        allin_count,
     ):
         self.cursor.execute(
-            "INSERT INTO data VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO data VALUES(?, ?, ?, ?, ?, ?, ?, ?, ? ,?)",
             (
                 balence,
                 highscore,
@@ -62,6 +64,7 @@ class DataBase:
                 jackpot_multiplier_counter,
                 previous_bet,
                 max_bet,
+                allin_count,
             ),
         )
         self.conn.commit()
@@ -92,6 +95,7 @@ class DataBase:
         jackpot_multiplier_counter,
         previous_bet,
         max_bet,
+        allin_count,
     ):
         if not self.get_data():
             self.insert_data(
@@ -104,11 +108,12 @@ class DataBase:
                 jackpot_multiplier_counter,
                 previous_bet,
                 max_bet,
+                allin_count,
             )
             return
         self.cursor.execute(
             "UPDATE data SET balance = ?, highscore = ?, spin_count = ?, multiplier_count = ?,"
-            + " broke_counter = ?, best_spin = ?, jackpot_multiplier_counter = ?, previous_bet = ?, max_bet = ?",
+            + " broke_counter = ?, best_spin = ?, jackpot_multiplier_counter = ?, previous_bet = ?, max_bet = ?, allin_count = ?,"
             (
                 balance,
                 highscore,
@@ -119,6 +124,7 @@ class DataBase:
                 jackpot_multiplier_counter,
                 previous_bet,
                 max_bet,
+                allin_count,
             ),
         )
         self.conn.commit()

@@ -51,6 +51,7 @@ class SlotMachine:
         self.jackpot_multiplier_counter = 0
         self.previous_bet = 1
         self.player_db.update_column("max_bet", 100)
+        self.allin_count = 0
 
     def delete_player(self):
         print("\nAre you sure you want to delete your player stats? (y/n):", end=' ')
@@ -75,6 +76,7 @@ class SlotMachine:
         )
         self.previous_bet = self.player_db.get_column('previous_bet')
         self.max_bet = self.player_db.get_column('max_bet')
+        self.allin_count = self.player_db.get_column('allin_count')
 
     def save_database(self):
         self.player_db.update_column("balance", self.balance)
@@ -85,6 +87,11 @@ class SlotMachine:
         self.player_db.update_column("best_spin", self.best_spin)
         self.player_db.update_column("jackpot_multiplier_counter", self.jackpot_multiplier_counter)
         self.player_db.update_column("previous_bet", self.previous_bet)
+        self.player_db.update_column("allin_count", self.allin_count)
+
+    def update_allin_counter(self):
+        self.allin_count += 1
+        self.player_db.update_column("allin_count", self.allin_count)
 
     def update_spin_counter(self):
         self.spin_counter += 1
@@ -366,13 +373,10 @@ class SlotMachine:
         # Add rows with the statistics and values
         table.add_row("Total spins", f"[blue]{self.spin_counter}[/blue]")
         table.add_row("Best spin", f"[blue]{self.best_spin}[/blue]")
-        table.add_row(
-            "Total multiplier uses", f"[blue]{self.multiplier_counter}[/blue]"
-        )
-        table.add_row(
-            "Multiplier jackpots", f"[blue]{self.jackpot_multiplier_counter}[/blue]"
-        )
+        table.add_row("Total multiplier uses", f"[blue]{self.multiplier_counter}[/blue]")
+        table.add_row("Multiplier jackpots", f"[blue]{self.jackpot_multiplier_counter}[/blue]")
         table.add_row("Total times broke", f"[blue]{self.broke_counter}[/blue]")
+        table.add_row("All in's", f"[blue]{self.allin_count}[/blue]")
         table.add_row("Highscore", f"[blue]{self.highscore}[/blue]")
         table.add_row("", "")  # Add an empty row for spacing
         table.add_row("Your balance", f"[bold green]{self.balance}[/bold green]")
@@ -411,6 +415,7 @@ class SlotMachine:
         self.display_slot_machine()
         self.check_best_spin()
         self.update_spin_counter()
+        self.update_allin_counter()
 
         # ask if the player wants to use the multiplier
         if self.winnings > 0:
