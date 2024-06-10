@@ -374,7 +374,7 @@ class SlotMachine:
         return lines
     
     def full_grid_check(self):
-        if self.get_lines == 8:
+        if len(self.get_wining_lines()) == 8:
             self.update_full_grid_counter()
 
     def print_stats(self):

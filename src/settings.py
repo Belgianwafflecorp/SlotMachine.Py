@@ -5,22 +5,22 @@ MIN_BET = 1
 ROWS = 3
 COLS = 3
 
-symbol_count = {
-    "🤑": 1,
-    ":apple:": 5,
-    ":banana:": 10,
-    ":watermelon:": 20,
-    ":cherries:": 40,
-    ":potato:": 25,
-}
-# symbol_count = { # debugging making the cherries more common
-#     "🤑" : 100,
-#     ":apple:" : 5,
-#     ":banana:" : 10,
-#     ":watermelon:" : 20,
-#     ":cherries:" : 100,
-#     ":potato:" : 25,
+# symbol_count = {
+#     "🤑": 1,
+#     ":apple:": 5,
+#     ":banana:": 10,
+#     ":watermelon:": 20,
+#     ":cherries:": 40,
+#     ":potato:": 25,
 # }
+symbol_count = { # debugging making the cherries more common
+    "🤑" : 1,
+    ":apple:" : 5,
+    ":banana:" : 10,
+    ":watermelon:" : 20,
+    ":cherries:" : 100000,
+    ":potato:" : 25,
+}
 
 
 symbol_values = {
