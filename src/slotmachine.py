@@ -52,6 +52,7 @@ class SlotMachine:
         self.previous_bet = 1
         self.player_db.update_column("max_bet", 100)
         self.allin_count = 0
+        self.full_grid_count = 0
 
     def delete_player(self):
         print("\nAre you sure you want to delete your player stats? (y/n):", end=' ')
@@ -77,6 +78,7 @@ class SlotMachine:
         self.previous_bet = self.player_db.get_column('previous_bet')
         self.max_bet = self.player_db.get_column('max_bet')
         self.allin_count = self.player_db.get_column('allin_count')
+        self.full_grid_count = self.player_db.get_column('full_grid_count')
 
     def save_database(self):
         self.player_db.update_column("balance", self.balance)
@@ -88,6 +90,7 @@ class SlotMachine:
         self.player_db.update_column("jackpot_multiplier_counter", self.jackpot_multiplier_counter)
         self.player_db.update_column("previous_bet", self.previous_bet)
         self.player_db.update_column("allin_count", self.allin_count)
+        self.player_db.update_column("full_grid_count", self.full_grid_count)
 
     def update_allin_counter(self):
         self.allin_count += 1
@@ -100,6 +103,10 @@ class SlotMachine:
     def update_multiplier_counter(self):
         self.multiplier_counter += 1
         self.player_db.update_column("multiplier_count", self.multiplier_counter)
+
+    def update_full_grid_counter(self):
+        self.full_grid_count += 1
+        self.player_db.update_column("full_grid_count", self.full_grid_count)
 
     def check_highscore(self):
         self.highscore = max(self.highscore, self.balance)
@@ -285,6 +292,7 @@ class SlotMachine:
             print(f"[bold yellow]{random.choice(quotes_loss)}[/bold yellow]")
         else:
             print(f"[bold yellow]{random.choice(quotes_win)}[/bold yellow]")
+        self.full_grid_check()
         self.check_highscore()
         self.save_database()
         return bet
@@ -364,6 +372,10 @@ class SlotMachine:
             + [[self.slots[i][self.rows - i - 1] for i in range(self.rows)]]
         )
         return lines
+    
+    def full_grid_check(self):
+        if self.get_lines == 8:
+            self.update_full_grid_counter()
 
     def print_stats(self):
         table = Table(title="Slot Machine Stats")
@@ -377,6 +389,7 @@ class SlotMachine:
         table.add_row("Multiplier jackpots", f"[blue]{self.jackpot_multiplier_counter}[/blue]")
         table.add_row("Total times broke", f"[blue]{self.broke_counter}[/blue]")
         table.add_row("All in's", f"[blue]{self.allin_count}[/blue]")
+        table.add_row("Full grid wins", f"[blue]{self.full_grid_count}[/blue]")
         table.add_row("Highscore", f"[blue]{self.highscore}[/blue]")
         table.add_row("", "")  # Add an empty row for spacing
         table.add_row("Your balance", f"[bold green]{self.balance}[/bold green]")
@@ -417,6 +430,7 @@ class SlotMachine:
         self.update_spin_counter()
         self.update_allin_counter()
 
+
         # ask if the player wants to use the multiplier
         if self.winnings > 0:
             print("Would you like to use the multiplier? (n to SKIP):", end=' ')
@@ -433,7 +447,7 @@ class SlotMachine:
             self.update_broke_counter()
             print("[bold yellow]Please don't tell us you borrowed that money.[/bold yellow]\n")
             print("You can get that back if you continue playing.")
-        
+        self.full_grid_check()
         self.check_highscore()
         self.save_database()
         return bet
