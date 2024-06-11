@@ -206,6 +206,27 @@ class SlotMachine:
             for _ in range(self.cols)
         ]
 
+    def display_slotmachine_spin_effect(self
+    ):
+        delay = 0.9
+        for _ in range(4):
+            self.slots = [[self.slots[j][(i - 1) % self.rows] for i in range(self.rows)] for j in range(self.cols)]
+            self.clear_screen()
+            self.display_slot_machine()
+            time.sleep(delay)
+            delay -= 0.2
+        for _ in range(10):
+            self.slots = [[self.slots[j][(i - 1) % self.rows] for i in range(self.rows)] for j in range(self.cols)]
+            self.clear_screen()
+            self.display_slot_machine()
+            time.sleep(delay)
+        for _ in range(7):
+            self.slots = [[self.slots[j][(i - 1) % self.rows] for i in range(self.rows)] for j in range(self.cols)]
+            self.clear_screen()
+            self.display_slot_machine()
+            time.sleep(delay)
+            delay += 0.1
+
     def ask_for_command_or_new_bet(self):
         print(
             f"Balance: ${self.balance}\n"
@@ -248,11 +269,6 @@ class SlotMachine:
         else:
             os.system("clear")
 
-    def spin_time(self):
-        print("\n\n\n\n\n\n\t   [bold yellow]Spinning the wheels...[/bold yellow]")
-        time.sleep(0.75)
-        self.clear_screen()
-
     def spin(self, bet=None):
         self.check_player_broke()
         if bet is None:
@@ -268,10 +284,10 @@ class SlotMachine:
             print("You don't have enough balance")
             return
         self.balance -= bet
-        self.spin_time()
+        #self.spin_time()
         self.get_slot_machine_spin()
         self.get_winnings(bet)
-        self.display_slot_machine()
+        self.display_slotmachine_spin_effect()
         self.check_best_spin()
         self.update_spin_counter()
 
@@ -425,7 +441,7 @@ class SlotMachine:
         self.balance -= bet
         self.get_slot_machine_spin()
         self.get_winnings(bet)
-        self.display_slot_machine()
+        self.display_slotmachine_spin_effect()
         self.check_best_spin()
         self.update_spin_counter()
         self.update_allin_counter()
