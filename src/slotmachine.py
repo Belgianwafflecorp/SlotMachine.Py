@@ -157,6 +157,13 @@ class SlotMachine:
         self.best_spin = max(self.best_spin, self.winnings)
         self.save_database()
 
+    def display_slot_machine(self):
+        print(self.slot_machine_part_1)
+        print(self.slot_machine_part_2())
+        print(self.slot_machine_part_3)
+        print(self.show_winnings())
+        print(self.slot_machine_part_4)
+
     def slot_machine_part_2(self):
         # display the row of self.slots vertically so row 1 is column 1
         # double
@@ -172,13 +179,6 @@ class SlotMachine:
 
             s += " |\n" if i != self.rows - 1 else " |"
         return s     
-
-    def display_slot_machine(self):
-        print(self.slot_machine_part_1)
-        print(self.slot_machine_part_2())
-        print(self.slot_machine_part_3)
-        print(self.show_winnings())
-        print(self.slot_machine_part_4)
 
     def show_winnings(self):
         winning_len = len(str(self.winnings))
@@ -205,7 +205,7 @@ class SlotMachine:
             )
             for _ in range(self.cols)
         ]
-
+        
     def display_slotmachine_spin_effect(self
     ):
         delay = 0.9
